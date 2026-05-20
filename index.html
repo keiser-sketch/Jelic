@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jelić Pools — Premium-Konfigurator</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@200;300;400;500;600;700;800;900&display=swap&subset=latin-ext');
+:root{
+  --pool:#6DB4C1;--pool-d:#4A96A4;--pool-dd:#2A6873;--pool-l:#E8F5F7;
+  --garten:#386436;--garten-d:#274825;--garten-l:#E8F2E8;
+  --stone:#A8A5A3;--stone-d:#7A7774;--stone-l:#F2F1F0;
+  --ink:#0C1A1E;--void:#06141A;--panel:#0F2329;--panel-2:#152F36;
+  --text:#E6F0F1;--muted:#9FB8BC;--tert:#6E8C92;
+  --line:rgba(141,205,216,.14);--line-s:rgba(141,205,216,.32);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{font-family:'Mulish',sans-serif;background:var(--void);color:var(--text);font-size:15px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+::selection{background:var(--pool);color:var(--ink);}
+.bg-wrap{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+.bg-grad{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 70% 0%,rgba(109,180,193,.16),transparent 60%),radial-gradient(ellipse 70% 50% at 10% 90%,rgba(56,100,54,.1),transparent 60%),linear-gradient(175deg,#06141A 0%,#0A1D24 55%,#081820 100%);}
+.caustic{position:absolute;border-radius:50%;filter:blur(75px);opacity:.38;}
+.c1{width:520px;height:520px;background:rgba(109,180,193,.34);top:-180px;right:-140px;animation:drift1 24s ease-in-out infinite;}
+.c2{width:380px;height:380px;background:rgba(42,104,115,.4);bottom:-120px;left:-100px;animation:drift2 28s ease-in-out infinite;}
+@keyframes drift1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-40px,50px) scale(1.12);}}
+@keyframes drift2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(50px,-40px) scale(1.15);}}
+.app{position:relative;z-index:1;max-width:1220px;margin:0 auto;padding:0 24px 80px;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:22px 0 18px;border-bottom:1px solid var(--line);gap:16px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:14px;}
+.brand .logo-svg{width:54px;height:54px;flex-shrink:0;}
+.brand .bt{line-height:1.15;}
+.brand .bt .n{font-weight:800;font-size:19px;letter-spacing:.04em;}
+.brand .bt .s{font-weight:700;font-size:9px;letter-spacing:.36em;color:var(--pool);margin-top:1px;}
+.brand .bt .sub{font-size:10px;color:var(--tert);font-weight:600;margin-top:2px;letter-spacing:.04em;}
+.tb-right{display:flex;align-items:center;gap:18px;font-size:12px;color:var(--muted);flex-wrap:wrap;}
+.tb-phone{display:flex;align-items:center;gap:7px;font-weight:700;color:var(--text);}
+.tb-phone svg{width:15px;height:15px;}
+.tb-badge{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--pool);border:1px solid var(--line-s);padding:5px 11px;border-radius:30px;}
+.hero{padding:36px 0 24px;text-align:center;}
+.hero .eyebrow{font-size:11px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;color:var(--pool);margin-bottom:14px;}
+.hero h1{font-weight:800;font-size:46px;line-height:1.08;letter-spacing:-.02em;margin-bottom:13px;}
+.hero h1 .lt{font-weight:200;}
+.hero p{color:var(--muted);font-size:16px;max-width:580px;margin:0 auto;}
+.steps{display:flex;align-items:center;justify-content:center;gap:0;margin:30px 0 36px;flex-wrap:wrap;}
+.step-dot{display:flex;align-items:center;gap:10px;cursor:pointer;transition:.3s;padding:6px 4px;}
+.step-dot .sd-n{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;border:2px solid var(--line-s);color:var(--tert);transition:.35s;background:var(--panel);flex-shrink:0;}
+.step-dot .sd-l{font-size:12px;font-weight:700;color:var(--tert);transition:.35s;white-space:nowrap;}
+.step-dot.active .sd-n{border-color:var(--pool);background:var(--pool);color:var(--ink);box-shadow:0 0 0 5px rgba(109,180,193,.18);}
+.step-dot.active .sd-l{color:var(--text);}
+.step-dot.done .sd-n{border-color:var(--pool-d);background:var(--pool-d);color:var(--ink);}
+.step-dot.done .sd-l{color:var(--muted);}
+.step-line{width:34px;height:2px;background:var(--line-s);margin:0 6px;transition:.35s;}
+.step-line.fill{background:var(--pool-d);}
+.config{display:grid;grid-template-columns:1fr 410px;gap:26px;align-items:start;}
+.panel{background:linear-gradient(160deg,var(--panel) 0%,var(--panel-2) 100%);border:1px solid var(--line);border-radius:22px;padding:30px;box-shadow:0 26px 64px -22px rgba(0,0,0,.6);}
+.panel-head{margin-bottom:24px;}
+.panel-head .ph-step{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--pool);}
+.panel-head h2{font-weight:800;font-size:26px;margin:5px 0 5px;letter-spacing:-.01em;}
+.panel-head p{color:var(--muted);font-size:13.5px;}
+.stage{display:none;animation:fadeIn .45s ease;}
+.stage.show{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+.opt-grid{display:grid;gap:14px;}
+.opt-grid.two{grid-template-columns:1fr 1fr;}
+.opt{position:relative;background:rgba(141,205,216,.04);border:1.6px solid var(--line);border-radius:14px;padding:18px 17px;cursor:pointer;transition:.22s;overflow:hidden;}
+.opt:hover{border-color:var(--line-s);background:rgba(141,205,216,.08);transform:translateY(-2px);}
+.opt.sel{border-color:var(--pool);background:rgba(109,180,193,.12);box-shadow:0 0 0 1px var(--pool),0 14px 30px -12px rgba(109,180,193,.5);}
+.opt.sel::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--pool),var(--pool-d));z-index:2;}
+.opt .opt-check{position:absolute;top:12px;right:12px;width:22px;height:22px;border-radius:50%;border:2px solid var(--line-s);transition:.22s;display:flex;align-items:center;justify-content:center;background:rgba(15,35,41,.7);z-index:3;}
+.opt.sel .opt-check{border-color:var(--pool);background:var(--pool);}
+.opt .opt-check svg{width:11px;height:11px;opacity:0;transition:.2s;}
+.opt.sel .opt-check svg{opacity:1;}
+.opt .opt-vis{height:120px;border-radius:10px;margin-bottom:13px;overflow:hidden;position:relative;}
+.opt .opt-name{font-weight:800;font-size:15.5px;margin-bottom:4px;padding-right:26px;}
+.opt .opt-desc{font-size:11.5px;color:var(--muted);line-height:1.5;}
+.opt .opt-price{margin-top:10px;font-size:12px;font-weight:800;color:var(--pool);letter-spacing:.01em;}
+.opt .opt-tag{position:absolute;top:10px;left:10px;font-size:8.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;background:var(--garten);color:#fff;padding:4px 9px;border-radius:20px;z-index:3;box-shadow:0 4px 12px rgba(0,0,0,.3);}
+.opt .opt-tag.partner{background:var(--pool-dd);}
+.opt .opt-tag.architektur{background:var(--stone-d);}
+.opt.multi.sel .opt-check{border-radius:6px;}
+.slider-wrap{background:rgba(141,205,216,.04);border:1.6px solid var(--line);border-radius:14px;padding:22px;margin-bottom:16px;}
+.slider-wrap .sw-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;}
+.slider-wrap .sw-label{font-weight:700;font-size:14px;}
+.slider-wrap .sw-val{font-weight:800;font-size:24px;color:var(--pool);}
+.slider-wrap .sw-val small{font-size:13px;color:var(--muted);font-weight:600;}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:5px;background:linear-gradient(90deg,var(--pool-d),var(--pool));outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:4px solid var(--pool);cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.4);transition:.15s;}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.14);}
+.slider-wrap .sw-scale{display:flex;justify-content:space-between;font-size:10.5px;color:var(--tert);margin-top:8px;}
+.model-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;}
+.model-pill{background:rgba(141,205,216,.04);border:1.6px solid var(--line);border-radius:12px;padding:14px 12px;cursor:pointer;transition:.2s;text-align:left;}
+.model-pill:hover{border-color:var(--line-s);}
+.model-pill.sel{border-color:var(--pool);background:rgba(109,180,193,.13);}
+.model-pill .mp-name{font-size:13px;font-weight:800;margin-bottom:3px;}
+.model-pill .mp-size{font-size:11px;color:var(--muted);font-weight:600;}
+.model-pill .mp-price{font-size:11px;color:var(--pool);font-weight:700;margin-top:6px;}
+.summary{position:sticky;top:20px;}
+.sum-card{background:linear-gradient(165deg,var(--panel) 0%,#0B1F25 100%);border:1px solid var(--line-s);border-radius:22px;overflow:hidden;box-shadow:0 32px 72px -26px rgba(0,0,0,.7);}
+.preview-tabs{display:flex;border-bottom:1px solid var(--line);background:var(--panel);}
+.preview-tab{flex:1;padding:11px;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--tert);cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px;border-bottom:2px solid transparent;}
+.preview-tab svg{width:13px;height:13px;}
+.preview-tab:hover{color:var(--muted);}
+.preview-tab.active{color:var(--pool);border-bottom-color:var(--pool);background:rgba(109,180,193,.06);}
+.preview-tab.disabled{opacity:.4;cursor:not-allowed;}
+.preview-stage{height:240px;position:relative;overflow:hidden;}
+.preview-pane{position:absolute;inset:0;opacity:0;transition:.35s;pointer-events:none;}
+.preview-pane.active{opacity:1;pointer-events:auto;}
+.pv-garden{background:linear-gradient(180deg,#1a3a42 0%,#0E2026 100%);}
+.pp-ground{position:absolute;left:0;right:0;bottom:0;height:135px;background:linear-gradient(180deg,#243d2a,#1a2e1f);}
+.pp-deck{position:absolute;bottom:92px;left:0;right:0;height:50px;background:linear-gradient(180deg,#9a9691,#7d7975);transition:.4s;}
+.pp-pool{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);border-radius:10px;transition:.5s cubic-bezier(.4,1.3,.5,1);overflow:hidden;box-shadow:0 16px 32px rgba(0,0,0,.55),inset 0 5px 16px rgba(0,0,0,.45);border:2px solid rgba(255,255,255,.08);}
+.pp-water{position:absolute;inset:0;}
+.pp-wave{position:absolute;left:-30%;right:-30%;height:200%;top:-60%;opacity:.32;background:repeating-linear-gradient(72deg,transparent 0 18px,rgba(255,255,255,.5) 18px 21px);animation:wavemove 7s linear infinite;z-index:2;pointer-events:none;}
+@keyframes wavemove{from{transform:translateX(0);}to{transform:translateX(60px);}}
+.pp-shimmer{position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse 60% 35% at 32% 22%,rgba(255,255,255,.4),transparent 60%);}
+.pp-material-layer{position:absolute;inset:0;z-index:0;}
+.pp-label{position:absolute;top:12px;left:12px;font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--pool);background:rgba(8,21,26,.78);padding:5px 10px;border-radius:20px;border:1px solid var(--line-s);backdrop-filter:blur(8px);z-index:3;}
+.pp-dims{position:absolute;bottom:8px;right:10px;font-size:10px;font-weight:700;color:#fff;background:rgba(8,21,26,.72);padding:4px 9px;border-radius:7px;backdrop-filter:blur(8px);z-index:3;}
+.pp-feat{position:absolute;width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(127,201,213,.4),0 0 12px rgba(127,201,213,.6);opacity:0;transition:.3s;z-index:4;}
+.pp-feat.on{opacity:1;}
+.pp-feat.light{background:#FFD45A;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(255,200,50,.4),0 0 14px rgba(255,200,50,.6);}50%{box-shadow:0 0 0 6px rgba(255,200,50,.5),0 0 22px rgba(255,200,50,.8);}}
+.pv-map{background:#1a2025;}
+#mapEl{width:100%;height:100%;}
+.map-overlay{position:absolute;top:12px;left:12px;right:12px;z-index:500;display:flex;gap:8px;align-items:center;pointer-events:none;}
+.map-overlay > *{pointer-events:auto;}
+.map-search{flex:1;background:rgba(8,21,26,.88);border:1px solid var(--line-s);border-radius:30px;padding:8px 14px;display:flex;align-items:center;gap:8px;backdrop-filter:blur(10px);}
+.map-search svg{width:14px;height:14px;color:var(--pool);flex-shrink:0;}
+.map-search input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:12px;font-family:'Mulish';font-weight:600;}
+.map-search input::placeholder{color:var(--tert);}
+.map-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--muted);text-align:center;padding:20px;}
+.map-empty svg{width:36px;height:36px;margin-bottom:10px;color:var(--pool);}
+.map-empty p{font-size:12.5px;line-height:1.55;max-width:240px;}
+.map-loading{display:none;color:var(--pool);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+.map-loading.on{display:block;}
+.sum-body{padding:24px 24px 8px;}
+.sum-body h3{font-size:13px;font-weight:800;letter-spacing:.04em;margin-bottom:4px;}
+.sum-tier{font-size:11.5px;color:var(--pool);font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:7px;}
+.sum-tier::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--pool);}
+.sum-list{list-style:none;}
+.sum-line{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px;}
+.sum-line:last-child{border-bottom:none;}
+.sum-line .sl-k{color:var(--muted);}
+.sum-line .sl-k b{color:var(--text);font-weight:700;display:block;font-size:13px;}
+.sum-line .sl-k span{font-size:11px;color:var(--tert);}
+.sum-line .sl-v{font-weight:800;color:var(--text);white-space:nowrap;font-size:12.5px;}
+.sum-line .sl-v.add{color:var(--pool);}
+.sum-empty{color:var(--tert);font-size:12px;font-style:italic;padding:7px 0;}
+.sum-total{background:rgba(109,180,193,.1);border-top:1px solid var(--line-s);padding:20px 24px;}
+.sum-total .st-row{display:flex;justify-content:space-between;align-items:baseline;}
+.sum-total .st-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;}
+.sum-total .st-val{font-weight:800;font-size:26px;color:var(--text);letter-spacing:-.01em;}
+.sum-total .st-val small{font-size:14px;color:var(--muted);}
+.sum-total .st-note{font-size:10.5px;color:var(--tert);margin-top:6px;line-height:1.5;}
+.sum-total .st-range{height:6px;border-radius:4px;background:rgba(141,205,216,.14);margin-top:12px;overflow:hidden;position:relative;}
+.sum-total .st-range i{position:absolute;top:0;bottom:0;border-radius:4px;background:linear-gradient(90deg,var(--pool-d),var(--pool));transition:.5s;}
+.nav-row{display:flex;gap:12px;margin-top:24px;}
+.btn{flex:1;padding:15px 20px;border-radius:12px;font-family:'Mulish';font-weight:800;font-size:14px;cursor:pointer;border:none;transition:.2s;display:flex;align-items:center;justify-content:center;gap:9px;letter-spacing:.01em;}
+.btn svg{width:16px;height:16px;}
+.btn-ghost{background:transparent;border:1.6px solid var(--line-s);color:var(--text);}
+.btn-ghost:hover{border-color:var(--pool);background:rgba(109,180,193,.08);}
+.btn-ghost:disabled{opacity:.3;cursor:not-allowed;}
+.btn-primary{background:linear-gradient(135deg,var(--pool),var(--pool-d));color:var(--ink);box-shadow:0 12px 26px -10px rgba(109,180,193,.6);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 32px -10px rgba(109,180,193,.75);}
+.btn-cta{background:linear-gradient(135deg,#4FC07A,var(--garten));color:#fff;box-shadow:0 12px 26px -10px rgba(56,100,54,.7);}
+.btn-cta:hover{transform:translateY(-2px);}
+.cat-sub{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--tert);margin:24px 0 12px;display:flex;align-items:center;gap:10px;}
+.cat-sub::after{content:"";flex:1;height:1px;background:var(--line);}
+.cat-sub:first-child{margin-top:0;}
+.loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+.loc-card{background:rgba(141,205,216,.04);border:1.6px solid var(--line);border-radius:14px;padding:20px;cursor:pointer;transition:.22s;text-align:center;}
+.loc-card:hover{border-color:var(--line-s);transform:translateY(-2px);}
+.loc-card.sel{border-color:var(--pool);background:rgba(109,180,193,.12);box-shadow:0 0 0 1px var(--pool);}
+.loc-card .lc-ic{width:48px;height:48px;border-radius:11px;margin:0 auto 12px;background:rgba(109,180,193,.14);display:flex;align-items:center;justify-content:center;}
+.loc-card .lc-ic svg{width:24px;height:24px;color:var(--pool);}
+.loc-card h4{font-size:15px;font-weight:800;margin-bottom:5px;}
+.loc-card p{font-size:11.5px;color:var(--muted);line-height:1.5;}
+.addr-form{background:rgba(141,205,216,.04);border:1.6px solid var(--line);border-radius:14px;padding:20px;display:none;}
+.addr-form.show{display:block;animation:fadeIn .3s ease;}
+.addr-row{display:grid;grid-template-columns:1fr 110px;gap:10px;}
+.addr-input{background:rgba(8,21,26,.5);border:1.6px solid var(--line);border-radius:10px;padding:11px 13px;font-family:'Mulish';font-size:13.5px;color:var(--text);transition:.2s;width:100%;}
+.addr-input:focus{outline:none;border-color:var(--pool);background:rgba(8,21,26,.7);}
+.addr-input::placeholder{color:var(--tert);}
+.addr-btn{background:linear-gradient(135deg,var(--pool),var(--pool-d));color:var(--ink);border:none;border-radius:10px;font-family:'Mulish';font-weight:800;font-size:12px;cursor:pointer;letter-spacing:.04em;transition:.2s;}
+.addr-btn:hover{transform:translateY(-1px);}
+.addr-btn:disabled{opacity:.6;cursor:wait;}
+.addr-status{font-size:11.5px;margin-top:10px;display:none;}
+.addr-status.show{display:block;}
+.addr-status.success{color:#4FC07A;}
+.addr-status.error{color:#E08653;}
+.addr-status.loading{color:var(--pool);}
+.final-hero{text-align:center;padding:8px 0 18px;}
+.final-hero .fh-ic{width:64px;height:64px;border-radius:50%;margin:0 auto 14px;background:linear-gradient(135deg,var(--pool),var(--pool-dd));display:flex;align-items:center;justify-content:center;box-shadow:0 12px 30px -8px rgba(109,180,193,.5);}
+.final-hero .fh-ic svg{width:30px;height:30px;}
+.final-hero h2{font-size:26px;font-weight:800;margin-bottom:6px;letter-spacing:-.01em;}
+.final-hero p{color:var(--muted);font-size:14px;max-width:420px;margin:0 auto;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:8px;}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field.full{grid-column:1/-1;}
+.field label{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;}
+.field input,.field textarea,.field select{background:rgba(141,205,216,.05);border:1.6px solid var(--line);border-radius:10px;padding:12px 14px;font-family:'Mulish';font-size:14px;color:var(--text);transition:.2s;}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--pool);background:rgba(109,180,193,.07);}
+.field textarea{resize:vertical;min-height:74px;font-family:'Mulish';}
+.consent{display:flex;gap:10px;align-items:flex-start;margin-top:6px;font-size:11.5px;color:var(--muted);cursor:pointer;}
+.consent input{margin-top:2px;accent-color:var(--pool);width:16px;height:16px;flex-shrink:0;}
+.qmeter{background:rgba(141,205,216,.05);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:16px;}
+.qmeter .qm-top{display:flex;justify-content:space-between;font-size:11px;font-weight:700;margin-bottom:8px;}
+.qmeter .qm-top .qm-stat{font-weight:800;}
+.qmeter .qm-bar{height:8px;border-radius:5px;background:rgba(141,205,216,.14);overflow:hidden;}
+.qmeter .qm-bar i{display:block;height:100%;border-radius:5px;transition:.5s;background:linear-gradient(90deg,var(--pool),#4FC07A);}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--garten);color:#fff;padding:15px 26px;border-radius:13px;font-weight:700;font-size:14px;box-shadow:0 16px 40px rgba(0,0,0,.5);z-index:9999;transition:.4s cubic-bezier(.4,1.3,.5,1);display:flex;align-items:center;gap:10px;max-width:90vw;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast svg{width:18px;height:18px;flex-shrink:0;}
+.foot-note{text-align:center;margin-top:34px;font-size:11.5px;color:var(--tert);line-height:1.7;}
+.foot-note b{color:var(--muted);}
+.stripe{display:flex;height:6px;width:100%;margin-top:18px;border-radius:3px;overflow:hidden;}
+.stripe i{flex:1;}
+.stripe i:nth-child(1){background:var(--garten);}
+.stripe i:nth-child(2){background:var(--pool);}
+.stripe i:nth-child(3){background:var(--stone);}
+.info-box{background:rgba(109,180,193,.06);border:1px solid var(--line);border-left:3px solid var(--pool);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:18px;}
+.info-box b{color:var(--text);}
+@media(max-width:980px){.config{grid-template-columns:1fr;}.summary{position:static;}.hero h1{font-size:32px;}.step-dot .sd-l{display:none;}.loc-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.opt-grid.two,.loc-grid{grid-template-columns:1fr;}.form-grid{grid-template-columns:1fr;}.hero h1{font-size:26px;}.nav-row{flex-direction:column;}.tb-right{font-size:11px;}}
+</style>
+</head>
+<body>
+<div class="bg-wrap"><div class="bg-grad"></div><div class="caustic c1"></div><div class="caustic c2"></div></div>
+<div class="app">
+  <div class="topbar">
+    <div class="brand">
+      <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="46" r="36" fill="none" stroke="#A8A5A3" stroke-width="3.6"/>
+        <path d="M 36 56 L 42 28 L 48 56 Z" fill="#386436"/>
+        <path d="M 50 56 L 58 22 L 66 56 Z" fill="#386436"/>
+        <g fill="#7A7774">
+          <rect x="22" y="56" width="11" height="4.5" rx="0.6"/>
+          <rect x="34" y="56" width="11" height="4.5" rx="0.6"/>
+          <rect x="46" y="56" width="11" height="4.5" rx="0.6"/>
+          <rect x="58" y="56" width="11" height="4.5" rx="0.6"/>
+          <rect x="70" y="56" width="9" height="4.5" rx="0.6"/>
+        </g>
+        <path d="M 22 66 Q 30 62 38 66 T 54 66 T 70 66 T 80 66" stroke="#6DB4C1" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <path d="M 22 72 Q 30 68 38 72 T 54 72 T 70 72 T 80 72" stroke="#6DB4C1" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <text x="50" y="96" font-family="Mulish, sans-serif" font-size="11" font-weight="700" fill="#A8A5A3" text-anchor="middle" letter-spacing="1.4">JELIĆ</text>
+      </svg>
+      <div class="bt">
+        <div class="n">JELIĆ POOLS</div>
+        <div class="s">PREMIUM POOLBAU</div>
+        <div class="sub">Garten · Pool · Landschaft · Stuttgart</div>
+      </div>
+    </div>
+    <div class="tb-right">
+      <span class="tb-badge">Riviera Premium Partner</span>
+      <span class="tb-phone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        0711 766756
+      </span>
+    </div>
+  </div>
+  <div class="hero">
+    <div class="eyebrow">Premium Pool-Konfigurator · 7 Schritte</div>
+    <h1>Ihr Pool. <span class="lt">Auf Ihrem Grundstück.</span></h1>
+    <p>Becken, Form, Technik, Ausstattung, Garten — und auf Wunsch direkt visualisiert auf Ihrer Adresse. Mit echten Komponenten aus der Riviera Pools D·Line Preisliste 2026.</p>
+    <div class="stripe" style="max-width:340px;margin:18px auto 0;"><i></i><i></i><i></i></div>
+  </div>
+  <div class="steps" id="steps"></div>
+  <div class="config">
+    <div class="panel">
+      <div class="panel-head">
+        <div class="ph-step" id="phStep">Schritt 1 von 7</div>
+        <h2 id="phTitle">Die Bauart</h2>
+        <p id="phDesc">Das Becken ist das Herz des Pools.</p>
+      </div>
+      <div class="stage show" data-stage="0">
+        <div class="opt-grid two" id="gridBauart"></div>
+      </div>
+      <div class="stage" data-stage="1">
+        <div class="cat-sub">Modell wählen — Riviera D·Line</div>
+        <div class="info-box" id="modelInfo">Wählen Sie zuerst ein Beckenmodell. Die Maße folgen den Original-Größen aus der Riviera-Preisliste 2026.</div>
+        <div class="model-row" id="modelRow"></div>
+        <div class="cat-sub" style="margin-top:22px;">Treppentyp</div>
+        <div class="opt-grid two" id="gridTreppe"></div>
+      </div>
+      <div class="stage" data-stage="2">
+        <div class="cat-sub">Filteranlage — Riviera Techniksysteme 2026</div>
+        <div class="opt-grid two" id="gridFilter"></div>
+        <div class="cat-sub">Wärmepumpe</div>
+        <div class="opt-grid two" id="gridHeizung"></div>
+      </div>
+      <div class="stage" data-stage="3">
+        <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px;">Original Riviera-Komponenten zu Preisen der Preisliste 2026. Mehrfachauswahl.</p>
+        <div class="cat-sub">Rollladenabdeckung</div>
+        <div class="opt-grid two" id="gridRollladen"></div>
+        <div class="cat-sub">Gegenstromanlage</div>
+        <div class="opt-grid two" id="gridGsa"></div>
+        <div class="cat-sub">Beleuchtung</div>
+        <div class="opt-grid two" id="gridLicht"></div>
+        <div class="cat-sub">Wellness & Komfort</div>
+        <div class="opt-grid two" id="gridWellness"></div>
+      </div>
+      <div class="stage" data-stage="4">
+        <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px;">Aus 12 Jahren Galabau-Erfahrung von Jelić. Mehrfachauswahl. Endgültige Kalkulation nach Vor-Ort-Termin.</p>
+        <div class="opt-grid two" id="gridGalabau"></div>
+      </div>
+      <div class="stage" data-stage="5">
+        <p style="font-size:13px;color:var(--muted);margin-bottom:18px;">Wir können Ihren Pool direkt auf einer Satellitenkarte auf Ihrem Grundstück einplanen — oder Sie überspringen diesen Schritt.</p>
+        <div class="loc-grid">
+          <div class="loc-card" id="locSkip" onclick="setLocMode('skip')">
+            <div class="lc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <h4>Überspringen</h4>
+            <p>Weiter mit Standard-Vorschau. Adresse können wir später besprechen.</p>
+          </div>
+          <div class="loc-card" id="locMap" onclick="setLocMode('map')">
+            <div class="lc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <h4>Adresse zeigen</h4>
+            <p>Pool wird auf einer Satellitenkarte auf Ihrem Grundstück platziert.</p>
+          </div>
+        </div>
+        <div class="addr-form" id="addrForm">
+          <label style="font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;display:block;">Adresse des Bauorts</label>
+          <div class="addr-row">
+            <input type="text" class="addr-input" id="addrInput" placeholder="Straße Hausnr, PLZ Ort" value="">
+            <button class="addr-btn" id="addrBtn" onclick="lookupAddress()">Anzeigen</button>
+          </div>
+          <div class="addr-status" id="addrStatus"></div>
+          <p style="font-size:11px;color:var(--tert);margin-top:12px;line-height:1.5;">Die Karte erscheint in der Vorschau rechts. Klicken Sie auf die Karte, um den Pool exakt zu positionieren. Datenquelle: Photon/OpenStreetMap, Satelliten: ESRI World Imagery.</p>
+        </div>
+      </div>
+      <div class="stage" data-stage="6">
+        <div class="final-hero">
+          <div class="fh-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <h2>Ihr Pool steht.</h2>
+          <p>Hinterlassen Sie Ihre Kontaktdaten — wir melden uns binnen 24 Stunden mit einem konkreten Festpreis-Angebot.</p>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label>Vorname</label><input type="text" placeholder="Max" id="fVorname"></div>
+          <div class="field"><label>Nachname</label><input type="text" placeholder="Mustermann" id="fNachname"></div>
+          <div class="field"><label>E-Mail</label><input type="email" placeholder="max@beispiel.de" id="fMail"></div>
+          <div class="field"><label>Telefon</label><input type="tel" placeholder="0170 0000000" id="fTel"></div>
+          <div class="field"><label>PLZ des Bauorts</label><input type="text" placeholder="70597" id="fPlz"></div>
+          <div class="field"><label>Eigentümer?</label><select id="fEigentum"><option value="ja">Ja, Eigentümer</option><option value="bald">Kauf in Planung</option><option value="nein">Nein, Mieter</option></select></div>
+          <div class="field"><label>Wunsch-Baujahr</label><select id="fJahr"><option>Saison 2026</option><option>Saison 2027</option><option>Saison 2028</option><option>Noch offen</option></select></div>
+          <div class="field"><label>Tempo</label><select id="fPrio"><option>So schnell wie möglich</option><option>In den nächsten 3 Monaten entscheiden</option><option>Ich sammle erst Informationen</option></select></div>
+          <div class="field full"><label>Nachricht (optional)</label><textarea placeholder="Besonderheiten des Grundstücks, Hanglage, Wünsche …" id="fMsg"></textarea></div>
+        </div>
+        <div class="qmeter">
+          <div class="qm-top"><span>Qualität Ihrer Anfrage</span><span class="qm-stat" id="qmStat">—</span></div>
+          <div class="qm-bar"><i id="qmBar" style="width:10%;"></i></div>
+        </div>
+        <label class="consent"><input type="checkbox" id="fConsent"><span>Ich bin einverstanden, dass Jelić Galabau meine Angaben speichert und mich kontaktiert.</span></label>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-ghost" id="btnBack" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Zurück</button>
+        <button class="btn btn-primary" id="btnNext">Weiter<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+    <div class="summary">
+      <div class="sum-card">
+        <div class="preview-tabs">
+          <div class="preview-tab active" id="tabGarden" onclick="switchPreview('garden')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 21h18"/><path d="M5 21V11l7-7 7 7v10"/></svg>Garten</div>
+          <div class="preview-tab disabled" id="tabMap" onclick="switchPreview('map')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Standort</div>
+        </div>
+        <div class="preview-stage">
+          <div class="preview-pane pv-garden active" id="paneGarden">
+            <div class="pp-ground"></div>
+            <div class="pp-deck" id="ppDeck"></div>
+            <div class="pp-pool" id="ppPool">
+              <div class="pp-water" id="ppWater">
+                <div class="pp-wave"></div>
+                <div class="pp-shimmer"></div>
+              </div>
+            </div>
+            <div class="pp-label" id="ppLabel">Ihr Pool</div>
+            <div class="pp-dims" id="ppDims">8,0 × 3,7 m</div>
+            <div class="pp-feat light" id="featLight" style="bottom:54px;left:46%;"></div>
+            <div class="pp-feat" id="featCover" style="top:62px;right:30%;"></div>
+            <div class="pp-feat" id="featJet" style="top:90px;left:18%;"></div>
+          </div>
+          <div class="preview-pane pv-map" id="paneMap">
+            <div class="map-overlay" id="mapOverlay" style="display:none;">
+              <div class="map-search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <input type="text" id="mapSearchInput" placeholder="Adresse suchen …">
+              </div>
+              <div class="map-loading" id="mapLoad">Suche …</div>
+            </div>
+            <div class="map-empty" id="mapEmpty">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <p>Geben Sie im Schritt „Standort" Ihre Adresse ein, um Ihren Pool auf Ihrem Grundstück zu sehen.</p>
+            </div>
+            <div id="mapEl" style="display:none;"></div>
+          </div>
+        </div>
+        <div class="sum-body">
+          <h3>IHRE KONFIGURATION</h3>
+          <div class="sum-tier" id="sumTier">Komfort-Linie · Jelić Pools</div>
+          <ul class="sum-list" id="sumList"></ul>
+        </div>
+        <div class="sum-total">
+          <div class="st-row"><span class="st-label">Preisrahmen</span><span class="st-val" id="stVal">— <small>€</small></span></div>
+          <div class="st-note" id="stNote">Basis: Riviera-Preisliste 2026 ab Werk · zzgl. Montage, Erdarbeiten, Anschlüsse · Festpreis nach Vor-Ort-Termin</div>
+          <div class="st-range"><i id="stRange" style="left:20%;width:40%;"></i></div>
+        </div>
+      </div>
+      <div class="foot-note"><b>Kostenlos & unverbindlich.</b> Preise basieren auf der offiziellen Riviera-Preisliste 2026<br>(Verkaufspreise ab Werk inkl. 19% MwSt.) und sind Orientierungsrahmen.<br>Verbindlicher Festpreis inkl. Montage folgt nach Vor-Ort-Termin.</div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6L9 17l-5-5"/></svg><span id="toastMsg">Anfrage gesendet!</span></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+// ========== DATA: ECHTE RIVIERA-PREISLISTE 2026 ==========
+const DATA = {
+  // Bauarten = Oberflächenausführung des Riviera-Beckens
+  bauart: [
+    { id:'farbe', name:'Beckenfarbe Premium', tag:'Standard', desc:'Original Riviera Epoxy-Acrylat Oberfläche in Papyrus, Silbergrau, Meerblau oder Beach. Porenlos, hygienisch, 20 Jahre Garantie auf Dichtigkeit.', price:0, vis:'farbe', priceLabel:'inklusive' },
+    { id:'granicite', name:'Granicite Steingrau', tag:'Mittelklasse', desc:'Strukturierte Stein-Optik in der Beckenwand. Edel-matte Anmutung, frostfest, hochwertig. Aufpreis ggü. Standardfarbe ca. 2.500-5.700 €.', price:3500, vis:'granicite', priceLabel:'+ ca. 3.500 €' },
+    { id:'mosaik', name:'Ezarri Glasmosaik', tag:'Signature · Riviera', desc:'Komplettverfliesung mit Ezarri-Glasmosaik werkseitig verfugt. Serien Zen, Iridescent, Metal, Space, Cocktail. Die edelste Riviera-Oberfläche, je nach Beckengröße 19.000-46.000 € Aufpreis.', price:24000, vis:'mosaik', priceLabel:'+ ca. 24.000 €' },
+    { id:'edelstahl', name:'Edelstahl V4A', tag:'Architektur', desc:'Becken aus gebürstetem V4A-Edelstahl. Architektonisch, extrem langlebig, unverwechselbarer Charakter. Sonderbau außerhalb der Riviera-Linie.', price:62000, vis:'edelstahl', priceLabel:'ab 62.000 €' }
+  ],
+  // Modelle aus realer Preisliste (Papyrus-Basispreise, inkl. 19% MwSt., ab Werk)
+  // Format: [Modell-ID, Anzeigename, Länge, Breite, Tiefe, Basispreis Papyrus]
+  modelle: [
+    // ANCONA - Treppe stirnseitig
+    { id:'anc-550', linie:'ancona', name:'Ancona 550/270', l:5.5, b:2.7, t:1.5, preis:15980 },
+    { id:'anc-650', linie:'ancona', name:'Ancona 650/320', l:6.5, b:3.2, t:1.5, preis:19810 },
+    { id:'anc-800-320', linie:'ancona', name:'Ancona 800/320', l:8.0, b:3.2, t:1.5, preis:22360 },
+    { id:'anc-800-370', linie:'ancona', name:'Ancona 800/370', l:8.0, b:3.7, t:1.5, preis:30420 },
+    { id:'anc-1000', linie:'ancona', name:'Ancona 1000/370', l:9.94, b:3.7, t:1.5, preis:34480 },
+    // LINEAR - Treppe stirnseitig, klare Linien
+    { id:'lin-700', linie:'linear', name:'Linear 700/320', l:6.9, b:3.2, t:1.5, preis:20580 },
+    { id:'lin-800', linie:'linear', name:'Linear 800/320', l:7.9, b:3.2, t:1.5, preis:23560 },
+    { id:'lin-745', linie:'linear', name:'Linear 745/370', l:7.4, b:3.7, t:1.5, preis:30110 },
+    { id:'lin-845', linie:'linear', name:'Linear 845/370', l:8.4, b:3.7, t:1.5, preis:32050 },
+    { id:'lin-945', linie:'linear', name:'Linear 945/370', l:9.4, b:3.7, t:1.5, preis:34030 },
+    { id:'lin-1045', linie:'linear', name:'Linear 1045/370', l:10.4, b:3.7, t:1.5, preis:35990 },
+    // MODENA - Sitzbereich + Treppe längsseits, Familienpool
+    { id:'mod-725', linie:'modena', name:'Modena 725/320', l:7.25, b:3.2, t:1.5, preis:21620 },
+    { id:'mod-825', linie:'modena', name:'Modena 825/320', l:8.25, b:3.2, t:1.5, preis:23760 },
+    { id:'mod-775', linie:'modena', name:'Modena 775/370', l:7.75, b:3.7, t:1.5, preis:30660 },
+    { id:'mod-875', linie:'modena', name:'Modena 875/370', l:8.75, b:3.7, t:1.5, preis:32610 },
+    { id:'mod-975', linie:'modena', name:'Modena 975/370', l:9.75, b:3.7, t:1.5, preis:34570 }
+  ],
+  // Treppentyp
+  treppe: [
+    { id:'standard', name:'Standard-Treppe', desc:'Im gewählten Modell bereits enthalten. 4-5 stufig, rutschhemmend profiliert, je nach Linie stirnseitig oder seitlich.', price:0, base:true },
+    { id:'integra', name:'Rollladenschacht Integra 2-13', tag:'Empfohlen', desc:'Verlängert das Becken um 48 cm. Klappbare Sitzbank, ermöglicht hohen Wasserspiegel. Original Riviera. Preis je nach Beckenbreite 5.235-6.375 €.', price:6375, riviera:true },
+    { id:'wetlounge', name:'WetLounge „RS"', tag:'Signature', desc:'Verlängert das Becken um 145 cm. Flachwasser-Sitz-/Liegebereich + integrierter Rollladen. Das Premium-Highlight. Je nach Beckenbreite 6.125-7.010 €.', price:7010, riviera:true }
+  ],
+  // Filteranlagen aus Techniksysteme-Preisliste 2026
+  filter: [
+    { id:'innen', name:'Technikträger Innen', desc:'Riviera Technikträger zur Montage im Innenraum. Orbit 1000 Filter, Speck Deluxe ECO VS Pumpe, Besgo 5-Wege-Ventil, AFM-Filtermaterial. 170×75×150 cm.', price:10140, riviera:true },
+    { id:'innen-connect', name:'Innen + RivieraConnect 1.1', desc:'Technikträger Innen mit voller Connect-Steuerung — App, Smart Dial, intelligente Heizungssteuerung, Solar-Vorrang.', price:13590, riviera:true },
+    { id:'aussen', name:'Technikschrank Außen', desc:'Riviera Technikschrank, Aluminiumrahmen RAL7016, 40mm Sandwichpanels, Gasdruckdämpfer. 200×100×105 cm, ca. 330 kg.', price:12140, riviera:true },
+    { id:'aussen-connect', name:'Außen + RivieraConnect 1.1', tag:'Empfohlen', desc:'Technikschrank Außen mit voller Connect-Steuerung. Komfort, Wetterschutz und Intelligenz vereint.', price:15590, riviera:true }
+  ],
+  // Wärmepumpe aus Techniksysteme-Preisliste 2026
+  heizung: [
+    { id:'keine', name:'Ohne Heizung', desc:'Natürliche Erwärmung über Sonne. Jederzeit nachrüstbar.', price:0, base:true },
+    { id:'hkr100', name:'HKR 100s Luftwärmepumpe', desc:'Titan-Wärmetauscher (10 J Gewährleistung), R410A, Heißgasabtauung, automatisches Heizen und Kühlen. Verlängert die Saison März-Oktober.', price:1750 },
+    { id:'hkr140', name:'HKR 140s Luftwärmepumpe', tag:'Größere Becken', desc:'Stärkere Variante für 370er Becken und schnellere Aufheizung. Identische Features wie HKR 100s, höhere Leistung.', price:2150 }
+  ],
+  // Rollladenabdeckung
+  rollladen: [
+    { id:'pvc-grau', name:'PVC Grau (Standard)', desc:'Basis-Abdeckung aus Hohlkammerprofilen, grau. Sicherheit und Wärmespeicher. Preis je nach Beckengröße 3.860-4.580 €.', price:3990, riviera:true },
+    { id:'pvc-solar', name:'PVC Solar', desc:'Solar-aktive Abdeckung, schwarz/transluzent. Spürbarer Wärmegewinn an Sonnentagen. 5.450-6.490 €.', price:5450, riviera:true },
+    { id:'pc-solar', name:'Polycarbonat Solar (Thermosafe)', tag:'Empfohlen', desc:'Hochwertiges Polycarbonat mit Anti-Algen-Profil. Hagelresistent. Original Riviera Thermosafe. 8.390-10.010 €.', price:8390, riviera:true },
+    { id:'pc-silber', name:'Polycarbonat Silber bedampft', tag:'Edelstahl-Look', desc:'Polycarbonat mit silberner Bedampfung — der „Edelstahl-Look". Modern und elegant. 9.060-10.800 €.', price:9060, riviera:true }
+  ],
+  // Gegenstromanlage
+  gsa: [
+    { id:'twinjet', name:'Twinjet Doppeldüsenanlage', desc:'Bewährte Pumpentechnologie, kraftvoller Wasserstrahl, Doppeldüse 2,6 kW. Für Dauerschwimmen.', price:7790, riviera:true },
+    { id:'rivierajet', name:'Riviera Jet Turbinenanlage', tag:'Empfohlen', desc:'12 V Niederspannung, vollintegriert mit Edelstahlblende, Volumenstrom 240 m³/h, 5-stufig regelbar, 5 Trainingsmodi. App-fähig.', price:12950, riviera:true },
+    { id:'evastream350', name:'EVAstream NEXT 350', tag:'Sportschwimmen Plus', desc:'1,7 kW Turbine, 350 m³/h, 8,5 m/s. Inkl. App-Steuerung. Profi-Niveau.', price:18950, riviera:true },
+    { id:'komfortjet300', name:'Komfortjet 300 m³', desc:'GFK-Gegenschwimmanlage, breite Schlitzdüse, 1.200 W, 300 m³/h. Naturnahe Strömung.', price:15950, riviera:true }
+  ],
+  // Beleuchtung
+  licht: [
+    { id:'s-ww', name:'Lichtpaket S (Warmweiß)', desc:'1 Scheinwerfer S1 in der Treppe, 60 W LED Warmweiß, 5.000 lm. Riviera Standard Classic poliert.', price:1425, riviera:true },
+    { id:'s-rgb', name:'Lichtpaket S (RGB-WW)', tag:'Farblicht', desc:'1 Scheinwerfer S1, 70 W LED RGB-WW. Inkl. Schaltkasten mit Fernbedienung.', price:2370, riviera:true },
+    { id:'m-rgb', name:'Lichtpaket M (2× RGB-WW)', desc:'2 Scheinwerfer R1, ø170 mm, 40 W RGB-WW. DMX-fähig, Schaltkasten mit Fernbedienung.', price:3525, riviera:true },
+    { id:'l-rgb', name:'Lichtpaket L (RGB-WW + 2 Spots)', tag:'Empfohlen', desc:'1 Scheinwerfer S1 + 2 zusätzliche R2 Spots, alle RGB-WW. Dramatische Beleuchtung.', price:4150, riviera:true }
+  ],
+  // Wellness & Komfort - Multi-Select
+  wellness: [
+    { id:'fun-pak', name:'FUN PAK Massageanlage', desc:'Strömungs- und Massageanlage mit doppelstrahliger GSA 2,6 kW, 2 Maritim-Düsen, 6 Microjets, 1 Bodengeysir + Unterbauschacht mit Echtholz-Kebony-Abdeckung. Für Modena.', price:16770, riviera:true },
+    { id:'massagestand', name:'Massagestand 4 Superjets', desc:'Massageanlage mit 4 Superjets, 38 m³/h, 2,2 kW Pumpe, inkl. 2m Edelstahl-Haltestange. Für gezielte Körpermassage.', price:7875, riviera:true },
+    { id:'luftsprudel', name:'Luftsprudelplatte', desc:'Bodensprudel mit Seitenkanalgebläse 0,85 kW. Sanfte, prickelnde Massage durch Luftbläschen.', price:3960, riviera:true },
+    { id:'luftsitzbank', name:'Luftsprudelsitzbank', desc:'Sitzbank mit eingelassenem Luftkanal + Piezotaster, Gebläse 0,85 kW. Erfrischende Körpermassage.', price:4605, riviera:true },
+    { id:'ambiente-rgb', name:'Ambiente-Lichtvoute RGB-WW', desc:'4× ø100 mm HT-LED-Scheinwerfer RGB-WW im Rollladenschacht. Stimmungslicht entlang der Beckenseite. Setzt einen Rollladenschacht voraus.', price:2740, riviera:true },
+    { id:'wintercover', name:'Winter-Sicherheitsabdeckung', desc:'Sicherheitsabdeckung aus hochfester Folie in Grau, Aluminiumrohre für Schneelast, Handkurbel, versenkbare Bodenanker. Schützt Pool und Rollladen.', price:6600, riviera:true }
+  ],
+  // Galabau - eigene Jelić-Leistungen, vorläufige Schätzwerte
+  galabau: [
+    { id:'terrasse', name:'Naturstein-Terrasse', desc:'Umlaufende Terrasse aus Travertin oder Granit. Frostsicher, rutschhemmend. Der edle Rahmen ums Becken. Vorläufiger Schätzwert, exakte Kalkulation nach Vor-Ort-Termin.', price:9500, jelic:true },
+    { id:'holzdeck', name:'Premium-Holzdeck', desc:'Sonnendeck aus Bangkirai oder Thermoesche. Warm unter den Füßen, langlebig, edel patiniert. Vorläufiger Schätzwert.', price:7200, jelic:true },
+    { id:'mauer', name:'Natursteinmauer trocken', desc:'Trockenmauer aus Muschelkalk oder Jura. Sicht- und Windschutz. Strukturiert den Gartenraum. Vorläufiger Schätzwert.', price:6400, jelic:true },
+    { id:'bepflanzung', name:'Mediterrane Bepflanzung', desc:'Gräser, Oliven, Lavendel, Pampasgras — die Pool-Landschaft als grünes Gesamtbild. Vorläufiger Schätzwert.', price:4800, jelic:true },
+    { id:'outdoor', name:'Outdoor-Dusche & Lounge', desc:'Gemauerte Dusche mit Anschluss, angelegte Lounge-Fläche mit Pflanzbeeten. Vorläufiger Schätzwert.', price:5600, jelic:true },
+    { id:'gartenlicht', name:'Garten-Lichtkonzept', desc:'Wegeleuchten, Spots, indirekte Beleuchtung im Pflanzbeet. Der Garten lebt auch nachts. Vorläufiger Schätzwert.', price:3900, jelic:true }
+  ]
+};
+
+const STEPS = ['Bauart','Modell & Treppe','Technik','Ausstattung','Garten','Standort','Anfrage'];
+let cur = 0, leafletMap = null, leafletPoolPolygon = null;
+let locMode = 'none', activePreview = 'garden';
+const state = {
+  bauart: 'farbe',
+  modell: 'lin-845',
+  treppe: 'integra',
+  filter: 'aussen-connect',
+  heizung: 'hkr100',
+  rollladen: 'pc-solar',
+  gsa: 'rivierajet',
+  licht: 'm-rgb',
+  wellness: [],
+  galabau: [],
+  addrCoords: null
+};
+</script>
+<script>
+function materialSVG(type){
+  if(type==='mosaik'){
+    let tiles='';
+    for(let y=0;y<14;y++) for(let x=0;x<24;x++){
+      const seed = Math.sin(x*7.3+y*3.1);
+      const dx = seed*0.15, dy=Math.cos(x*3+y*7)*0.15;
+      const a = 0.06 + Math.abs(Math.sin(x*y*1.7))*0.22;
+      const palette = ['#6DB4C1','#8FCDD8','#2A6873','#1A6E7E','#4A96A4','#3AA0AE'];
+      const c = palette[Math.floor(Math.abs(Math.sin(x*y))*palette.length)];
+      tiles += '<rect x="'+(x*8.5+dx)+'" y="'+(y*8.5+dy)+'" width="7.7" height="7.7" rx="0.5" fill="'+c+'" opacity="'+(0.45+a)+'"/>';
+    }
+    return '<svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="mos-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3AA0AE"/><stop offset="50%" stop-color="#1A6E7E"/><stop offset="100%" stop-color="#0F4A55"/></linearGradient><linearGradient id="mos-sheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff" stop-opacity="0.32"/><stop offset="50%" stop-color="#fff" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity="0.25"/></linearGradient></defs><rect width="200" height="120" fill="url(#mos-grad)"/>'+tiles+'<rect width="200" height="120" fill="url(#mos-sheen)" opacity="0.4"/></svg>';
+  }
+  if(type==='farbe'){
+    return '<svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cer-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7FC9D5"/><stop offset="60%" stop-color="#4A96A4"/><stop offset="100%" stop-color="#2A6873"/></linearGradient><radialGradient id="cer-shine" cx="0.3" cy="0.2" r="0.6"><stop offset="0%" stop-color="#fff" stop-opacity="0.55"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><rect width="200" height="120" fill="url(#cer-grad)"/><rect width="200" height="120" fill="url(#cer-shine)"/><path d="M0 80 Q50 70 100 80 T200 80" stroke="#fff" stroke-opacity="0.2" stroke-width="1" fill="none"/><path d="M0 92 Q50 84 100 92 T200 92" stroke="#fff" stroke-opacity="0.16" stroke-width="1" fill="none"/></svg>';
+  }
+  if(type==='granicite'){
+    let speckles='';
+    for(let i=0;i<200;i++){
+      const x=Math.random()*200, y=Math.random()*120, r=Math.random()*1.5+0.3;
+      const o=Math.random()*0.4+0.15;
+      const c=Math.random()<0.5?'#8B8580':'#5E5854';
+      speckles += '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+c+'" opacity="'+o+'"/>';
+    }
+    return '<svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="gr-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7B7672"/><stop offset="100%" stop-color="#4A4641"/></linearGradient></defs><rect width="200" height="120" fill="url(#gr-grad)"/>'+speckles+'<rect width="200" height="120" fill="#fff" opacity="0.04"/></svg>';
+  }
+  if(type==='edelstahl'){
+    let lines='';
+    for(let i=0;i<60;i++){
+      const y = i*2 + Math.sin(i)*0.5;
+      const op = 0.06 + Math.abs(Math.sin(i*1.3))*0.09;
+      lines += '<line x1="0" y1="'+y+'" x2="200" y2="'+(y+1)+'" stroke="#fff" stroke-opacity="'+op+'" stroke-width="0.6"/>';
+    }
+    return '<svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="es-grad" x1="0" y1="0" x2="1" y2="0.5"><stop offset="0%" stop-color="#8FA9B0"/><stop offset="30%" stop-color="#A5BDC3"/><stop offset="55%" stop-color="#5E7A82"/><stop offset="100%" stop-color="#324C52"/></linearGradient></defs><rect width="200" height="120" fill="url(#es-grad)"/>'+lines+'<ellipse cx="50" cy="30" rx="80" ry="20" fill="#fff" opacity="0.18"/></svg>';
+  }
+}
+
+function renderSteps(){
+  const el = document.getElementById('steps'); el.innerHTML = '';
+  STEPS.forEach((s,i)=>{
+    const d = document.createElement('div');
+    d.className = 'step-dot' + (i===cur?' active':'') + (i<cur?' done':'');
+    d.innerHTML = '<div class="sd-n">'+(i<cur?'✓':(i+1))+'</div><div class="sd-l">'+s+'</div>';
+    d.onclick = ()=>{ if(i<=cur){ cur=i; refresh(); } };
+    el.appendChild(d);
+    if(i<STEPS.length-1){
+      const ln = document.createElement('div');
+      ln.className = 'step-line' + (i<cur?' fill':'');
+      el.appendChild(ln);
+    }
+  });
+}
+
+const checkSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="#0C1A1E" stroke-width="3.4"><path d="M20 6L9 17l-5-5"/></svg>';
+function fmtEUR(p){ return p.toLocaleString('de-DE')+' €'; }
+function fmtAdd(p){ return p>0 ? '+ '+fmtEUR(p) : 'inklusive'; }
+
+function renderBauart(){
+  const g = document.getElementById('gridBauart'); g.innerHTML = '';
+  DATA.bauart.forEach(o=>{
+    const sel = state.bauart===o.id;
+    const d = document.createElement('div');
+    d.className = 'opt'+(sel?' sel':'');
+    let tagClass = '';
+    if(o.tag){
+      if(o.tag.indexOf('Riviera')>=0) tagClass=' partner';
+      else if(o.tag.indexOf('Architektur')>=0) tagClass=' architektur';
+    }
+    d.innerHTML = (o.tag?'<div class="opt-tag'+tagClass+'">'+o.tag+'</div>':'')
+      +'<div class="opt-check">'+checkSVG+'</div>'
+      +'<div class="opt-vis">'+materialSVG(o.vis)+'</div>'
+      +'<div class="opt-name">'+o.name+'</div>'
+      +'<div class="opt-desc">'+o.desc+'</div>'
+      +'<div class="opt-price">'+o.priceLabel+'</div>';
+    d.onclick = ()=>{ state.bauart=o.id; refresh(); };
+    g.appendChild(d);
+  });
+}
+
+function renderModelle(){
+  const r = document.getElementById('modelRow'); r.innerHTML = '';
+  DATA.modelle.forEach(m=>{
+    const sel = state.modell===m.id;
+    const d = document.createElement('div');
+    d.className = 'model-pill'+(sel?' sel':'');
+    d.innerHTML = '<div class="mp-name">'+m.name+'</div>'
+      +'<div class="mp-size">'+m.l.toString().replace('.',',')+' × '+m.b.toString().replace('.',',')+' × '+m.t.toString().replace('.',',')+' m</div>'
+      +'<div class="mp-price">ab '+fmtEUR(m.preis)+'</div>';
+    d.onclick = ()=>{ state.modell=m.id; refresh(); };
+    r.appendChild(d);
+  });
+  const info = document.getElementById('modelInfo');
+  const m = DATA.modelle.find(x=>x.id===state.modell);
+  if(m){
+    const linieDesc = {
+      ancona:'Ancona — schlichte stirnseitige Treppenanlage, maximale Schwimmfläche, zeitloses Design.',
+      linear:'Linear — klare Linien, 4-stufige Treppe, ideal für moderne Architektur.',
+      modena:'Modena — Familienpool mit großzügiger 6-stufiger Treppe und Sitzbereich. Optional mit FUN PAK Massageanlage erweiterbar.'
+    };
+    info.innerHTML = '<b>'+m.name+'</b> · Beckeninhalt ca. '+Math.round(m.l*m.b*1.42)+' m³ · '+linieDesc[m.linie];
+  }
+}
+
+function renderRadioGrid(gridId,list,stateKey){
+  const g = document.getElementById(gridId); g.innerHTML = '';
+  list.forEach(o=>{
+    const sel = state[stateKey]===o.id;
+    const d = document.createElement('div');
+    d.className = 'opt'+(sel?' sel':'');
+    d.innerHTML = (o.tag?'<div class="opt-tag'+(o.riviera?' partner':'')+'">'+o.tag+'</div>':'')
+      +'<div class="opt-check">'+checkSVG+'</div>'
+      +'<div class="opt-name">'+o.name+'</div>'
+      +'<div class="opt-desc">'+o.desc+'</div>'
+      +'<div class="opt-price">'+fmtAdd(o.price)+'</div>';
+    d.onclick = ()=>{ state[stateKey]=o.id; refresh(); };
+    g.appendChild(d);
+  });
+}
+
+function renderMultiGrid(gridId,list,stateKey){
+  const g = document.getElementById(gridId); g.innerHTML = '';
+  list.forEach(o=>{
+    const sel = state[stateKey].indexOf(o.id)>=0;
+    const d = document.createElement('div');
+    d.className = 'opt multi'+(sel?' sel':'');
+    let tagClass = o.riviera?' partner':(o.jelic?'':'');
+    d.innerHTML = (o.tag?'<div class="opt-tag'+tagClass+'">'+o.tag+'</div>':(o.riviera?'<div class="opt-tag partner">Riviera</div>':(o.jelic?'<div class="opt-tag">Jelić Galabau</div>':'')))
+      +'<div class="opt-check">'+checkSVG+'</div>'
+      +'<div class="opt-name">'+o.name+'</div>'
+      +'<div class="opt-desc">'+o.desc+'</div>'
+      +'<div class="opt-price">'+fmtAdd(o.price)+'</div>';
+    d.onclick = ()=>{
+      const arr = state[stateKey];
+      const i = arr.indexOf(o.id);
+      if(i>=0) arr.splice(i,1); else arr.push(o.id);
+      refresh();
+    };
+    g.appendChild(d);
+  });
+}
+
+function calcPrice(){
+  let p = 0;
+  // Modell-Basispreis
+  const m = DATA.modelle.find(x=>x.id===state.modell);
+  if(m) p += m.preis;
+  // Bauart-Aufpreis
+  const ba = DATA.bauart.find(b=>b.id===state.bauart);
+  if(ba) p += ba.price;
+  // Treppe / Rollladenschacht
+  const tr = DATA.treppe.find(x=>x.id===state.treppe);
+  if(tr) p += tr.price;
+  // Filter
+  const fi = DATA.filter.find(x=>x.id===state.filter);
+  if(fi) p += fi.price;
+  // Heizung
+  const he = DATA.heizung.find(x=>x.id===state.heizung);
+  if(he) p += he.price;
+  // Rollladen-Abdeckung
+  const ro = DATA.rollladen.find(x=>x.id===state.rollladen);
+  if(ro) p += ro.price;
+  // GSA
+  const gs = DATA.gsa.find(x=>x.id===state.gsa);
+  if(gs) p += gs.price;
+  // Licht
+  const li = DATA.licht.find(x=>x.id===state.licht);
+  if(li) p += li.price;
+  // Wellness
+  state.wellness.forEach(id=>{ const o = DATA.wellness.find(x=>x.id===id); if(o) p+=o.price; });
+  // Galabau
+  state.galabau.forEach(id=>{ const o = DATA.galabau.find(x=>x.id===id); if(o) p+=o.price; });
+  return Math.max(p,0);
+}
+
+function renderSummary(){
+  const list = document.getElementById('sumList'); list.innerHTML = '';
+  const add = (k,sub,v,isAdd)=>{
+    const li = document.createElement('li');
+    li.className='sum-line';
+    li.innerHTML = '<span class="sl-k"><b>'+k+'</b>'+(sub?'<span>'+sub+'</span>':'')+'</span><span class="sl-v'+(isAdd?' add':'')+'">'+v+'</span>';
+    list.appendChild(li);
+  };
+  const m = DATA.modelle.find(x=>x.id===state.modell);
+  if(m) add('Modell', m.name+' · '+m.l.toString().replace('.',',')+' × '+m.b.toString().replace('.',',')+' m', fmtEUR(m.preis));
+  const ba = DATA.bauart.find(b=>b.id===state.bauart);
+  if(ba && ba.price>0) add('Oberfläche', ba.name, fmtAdd(ba.price), true);
+  else if(ba) add('Oberfläche', ba.name, 'inkl.');
+  const tr = DATA.treppe.find(x=>x.id===state.treppe);
+  if(tr && !tr.base) add('Treppe', tr.name, fmtAdd(tr.price), true);
+  const fi = DATA.filter.find(x=>x.id===state.filter);
+  if(fi) add('Technik', fi.name, fmtEUR(fi.price), true);
+  const he = DATA.heizung.find(x=>x.id===state.heizung);
+  if(he && !he.base) add('Heizung', he.name, fmtAdd(he.price), true);
+  const ro = DATA.rollladen.find(x=>x.id===state.rollladen);
+  if(ro) add('Rollladen', ro.name, fmtAdd(ro.price), true);
+  const gs = DATA.gsa.find(x=>x.id===state.gsa);
+  if(gs) add('Gegenstrom', gs.name, fmtAdd(gs.price), true);
+  const li = DATA.licht.find(x=>x.id===state.licht);
+  if(li) add('Licht', li.name, fmtAdd(li.price), true);
+  state.wellness.forEach(id=>{ const o = DATA.wellness.find(x=>x.id===id); if(o) add('Wellness', o.name, fmtAdd(o.price), true); });
+  state.galabau.forEach(id=>{ const o = DATA.galabau.find(x=>x.id===id); if(o) add('Garten', o.name, '≈ '+fmtAdd(o.price), true); });
+  if(list.children.length===0) list.innerHTML = '<div class="sum-empty">Noch keine Auswahl getroffen.</div>';
+  const p = calcPrice();
+  // Spannweite ±5% / +15% (untere Grenze nahe Listenpreis, obere mit Sicherheit für Maßvarianten)
+  const low = Math.round(p*0.95/500)*500, high = Math.round(p*1.15/500)*500;
+  document.getElementById('stVal').innerHTML = low.toLocaleString('de-DE')+' – '+high.toLocaleString('de-DE')+' <small>€</small>';
+  const pct = Math.min(Math.max((p-20000)/(200000-20000),0),1);
+  const rng = document.getElementById('stRange');
+  rng.style.left = (pct*62)+'%';
+  rng.style.width = '32%';
+  const tierEl = document.getElementById('sumTier');
+  if(p>130000) tierEl.textContent='Signature-Klasse · Riviera Premium';
+  else if(p>80000) tierEl.textContent='Premium-Linie · Riviera Partner';
+  else if(p>40000) tierEl.textContent='Komfort-Linie · Jelić Pools';
+  else tierEl.textContent='Einstiegs-Linie · Jelić Pools';
+}
+
+function renderPreview(){
+  const ba = DATA.bauart.find(b=>b.id===state.bauart);
+  const m = DATA.modelle.find(x=>x.id===state.modell);
+  const pool = document.getElementById('ppPool');
+  if(m){
+    const w = 130 + (m.l-5.5)/(11-5.5)*180;
+    const h = 56 + (m.b-2.7)/(4.2-2.7)*52;
+    pool.style.width = Math.max(120,w)+'px';
+    pool.style.height = Math.max(50,h)+'px';
+  }
+  pool.style.borderRadius = '10px';
+  const ppWater = document.getElementById('ppWater');
+  const prev = ppWater.querySelector('.pp-material-layer');
+  if(prev) prev.remove();
+  const ml = document.createElement('div');
+  ml.className = 'pp-material-layer';
+  ml.innerHTML = materialSVG(ba.vis);
+  ppWater.insertBefore(ml, ppWater.firstChild);
+  document.getElementById('ppLabel').textContent = m ? m.name : 'Ihr Pool';
+  document.getElementById('ppDims').textContent = m ? (m.l.toString().replace('.',',')+' × '+m.b.toString().replace('.',',')+' m') : '';
+  // Features-Indikatoren
+  const hasLight = state.licht!=='s-ww';
+  document.getElementById('featLight').classList.toggle('on', hasLight);
+  const hasCover = state.rollladen && state.rollladen!=='pvc-grau';
+  document.getElementById('featCover').classList.toggle('on', hasCover || state.treppe==='integra' || state.treppe==='wetlounge');
+  const hasJet = state.gsa && state.gsa!=='none';
+  document.getElementById('featJet').classList.toggle('on', !!hasJet);
+  const deck = document.getElementById('ppDeck');
+  if(state.galabau.indexOf('holzdeck')>=0) deck.style.background='linear-gradient(180deg,#b07c43,#8a5e30)';
+  else if(state.galabau.indexOf('terrasse')>=0) deck.style.background='linear-gradient(180deg,#cec9c2,#a39e96)';
+  else deck.style.background='linear-gradient(180deg,#9a9691,#7d7975)';
+  updateMapPool();
+}
+
+const STAGE_META = [
+  { t:'Die Bauart', d:'Die Beckenoberfläche bestimmt Charakter und Wertigkeit des Pools. Standard-Beckenfarbe ist inklusive — Granicite, Mosaik oder Edelstahl heben den Pool sichtbar.' },
+  { t:'Modell & Treppe', d:'Wählen Sie ein Riviera D·Line Modell. Die Größen entsprechen exakt der Riviera-Preisliste 2026. Optional mit integriertem Rollladenschacht.' },
+  { t:'Die Technik', d:'Filteranlage, RivieraConnect-Steuerung und Wärmepumpe — die Technik bestimmt Komfort, Betriebskosten und Saisonlänge.' },
+  { t:'Die Ausstattung', d:'Echte Riviera-Komponenten: Rollladenabdeckung, Gegenstromanlage, Beleuchtung, Wellness — alles zu Preisen der Preisliste 2026.' },
+  { t:'Der Garten drumherum', d:'Pool und Garten als Gesamtbild — der Galabau-Teil von Jelić. Vorläufige Schätzwerte, exakte Kalkulation im Vor-Ort-Termin.' },
+  { t:'Standort', d:'Auf Wunsch zeigen wir Ihren Pool direkt auf Ihrem Grundstück. Optional.' },
+  { t:'Ihre Anfrage', d:'Fast geschafft — wir erstellen Ihr persönliches Festpreis-Angebot inkl. Montage.' }
+];
+
+function updateQMeter(){
+  let score = 10;
+  if(document.getElementById('fVorname').value.trim()) score+=10;
+  if(document.getElementById('fNachname').value.trim()) score+=10;
+  if(/.+@.+\..+/.test(document.getElementById('fMail').value)) score+=20;
+  if(document.getElementById('fTel').value.trim().length>=6) score+=20;
+  if(document.getElementById('fPlz').value.trim().length>=4) score+=10;
+  const eig = document.getElementById('fEigentum').value;
+  if(eig==='ja') score+=15; else if(eig==='bald') score+=8;
+  const prio = document.getElementById('fPrio').value;
+  if(prio.indexOf('schnell')>=0) score+=5;
+  score = Math.min(score,100);
+  document.getElementById('qmBar').style.width = score+'%';
+  const st = document.getElementById('qmStat');
+  if(score>=80){ st.textContent='Erstklassig'; st.style.color='#4FC07A'; }
+  else if(score>=50){ st.textContent='Gut'; st.style.color='#6DB4C1'; }
+  else { st.textContent='Bitte ausfüllen'; st.style.color='#9FB8BC'; }
+}
+
+function refresh(){
+  renderSteps();
+  document.querySelectorAll('.stage').forEach(s=>{ s.classList.toggle('show', +s.dataset.stage===cur); });
+  document.getElementById('phStep').textContent = 'Schritt '+(cur+1)+' von '+STEPS.length;
+  document.getElementById('phTitle').textContent = STAGE_META[cur].t;
+  document.getElementById('phDesc').textContent = STAGE_META[cur].d;
+  if(cur===0) renderBauart();
+  if(cur===1){ renderModelle(); renderRadioGrid('gridTreppe',DATA.treppe,'treppe'); }
+  if(cur===2){ renderRadioGrid('gridFilter',DATA.filter,'filter'); renderRadioGrid('gridHeizung',DATA.heizung,'heizung'); }
+  if(cur===3){
+    renderRadioGrid('gridRollladen',DATA.rollladen,'rollladen');
+    renderRadioGrid('gridGsa',DATA.gsa,'gsa');
+    renderRadioGrid('gridLicht',DATA.licht,'licht');
+    renderMultiGrid('gridWellness',DATA.wellness,'wellness');
+  }
+  if(cur===4) renderMultiGrid('gridGalabau',DATA.galabau,'galabau');
+  if(cur===5){
+    document.getElementById('locSkip').classList.toggle('sel', locMode==='skip');
+    document.getElementById('locMap').classList.toggle('sel', locMode==='map');
+    document.getElementById('addrForm').classList.toggle('show', locMode==='map');
+  }
+  if(cur===6) updateQMeter();
+  document.getElementById('btnBack').disabled = cur===0;
+  const next = document.getElementById('btnNext');
+  if(cur===STEPS.length-1){
+    next.className='btn btn-cta';
+    next.innerHTML='Anfrage absenden<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>';
+  } else {
+    next.className='btn btn-primary';
+    next.innerHTML='Weiter<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+  }
+  renderSummary();
+  renderPreview();
+}
+
+function setLocMode(m){
+  locMode = m;
+  refresh();
+  if(m==='map') document.getElementById('tabMap').classList.remove('disabled');
+}
+
+// ========== GEOCODING — Photon (komoot) primary, Nominatim fallback ==========
+async function geocode(query){
+  // Timeout wrapper
+  const fetchWithTimeout = async (url, ms=8000)=>{
+    const ctrl = new AbortController();
+    const t = setTimeout(()=>ctrl.abort(), ms);
+    try{
+      const res = await fetch(url, { signal: ctrl.signal, headers:{'Accept':'application/json'} });
+      clearTimeout(t);
+      return res;
+    } catch(e){
+      clearTimeout(t);
+      throw e;
+    }
+  };
+
+  // Strategie 1: Photon (komoot) — browserfreundlich, kein API-Key, CORS sauber
+  try{
+    const url = 'https://photon.komoot.io/api/?q='+encodeURIComponent(query)+'&limit=1&lang=de';
+    const res = await fetchWithTimeout(url, 8000);
+    if(res.ok){
+      const data = await res.json();
+      if(data.features && data.features.length>0){
+        const f = data.features[0];
+        const coords = f.geometry.coordinates; // [lon, lat]
+        const props = f.properties || {};
+        const parts = [props.name, props.housenumber, props.postcode, props.city, props.state].filter(Boolean);
+        return {
+          lat: coords[1],
+          lon: coords[0],
+          display: parts.join(', ') || (props.name || query),
+          source: 'photon'
+        };
+      }
+    }
+  } catch(e){
+    console.warn('Photon failed:', e.message);
+  }
+
+  // Strategie 2: Nominatim Fallback
+  try{
+    const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=de,at,ch&q='+encodeURIComponent(query);
+    const res = await fetchWithTimeout(url, 8000);
+    if(res.ok){
+      const data = await res.json();
+      if(data.length>0){
+        return {
+          lat: parseFloat(data[0].lat),
+          lon: parseFloat(data[0].lon),
+          display: data[0].display_name.split(',').slice(0,4).join(', '),
+          source: 'nominatim'
+        };
+      }
+    }
+  } catch(e){
+    console.warn('Nominatim failed:', e.message);
+  }
+
+  return null;
+}
+
+async function lookupAddress(){
+  const q = document.getElementById('addrInput').value.trim();
+  if(!q){
+    showAddrStatus('Bitte eine Adresse eingeben.', 'error');
+    return;
+  }
+  const btn = document.getElementById('addrBtn');
+  btn.disabled = true;
+  btn.textContent = 'Suche…';
+  showAddrStatus('Suche Adresse …', 'loading');
+  try{
+    const result = await geocode(q);
+    if(!result){
+      showAddrStatus('Adresse nicht gefunden. Bitte Straße, Hausnummer, PLZ und Ort prüfen.', 'error');
+      return;
+    }
+    state.addrCoords = [result.lat, result.lon];
+    showAddrStatus('✓ Gefunden: '+result.display, 'success');
+    showMapWithLocation(result.lat, result.lon);
+    switchPreview('map');
+  } catch(e){
+    showAddrStatus('Netzwerkfehler. Bitte erneut versuchen oder Adresse präzisieren.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Anzeigen';
+  }
+}
+
+function showAddrStatus(msg, type){
+  const stat = document.getElementById('addrStatus');
+  stat.className = 'addr-status show '+(type||'');
+  stat.textContent = msg;
+}
+
+function showMapWithLocation(lat, lon){
+  document.getElementById('mapEmpty').style.display = 'none';
+  document.getElementById('mapEl').style.display = 'block';
+  document.getElementById('mapOverlay').style.display = 'flex';
+  if(!leafletMap){
+    leafletMap = L.map('mapEl', { zoomControl: false, attributionControl: false }).setView([lat, lon], 19);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 21,
+      crossOrigin: true,
+      attribution: '© Esri'
+    }).addTo(leafletMap);
+    L.control.zoom({ position:'bottomright' }).addTo(leafletMap);
+    leafletMap.on('click', (e)=>{ placePoolPolygon(e.latlng.lat, e.latlng.lng); state.addrCoords = [e.latlng.lat, e.latlng.lng]; });
+  } else {
+    leafletMap.setView([lat, lon], 19);
+    setTimeout(()=>leafletMap.invalidateSize(), 100);
+  }
+  placePoolPolygon(lat, lon);
+}
+
+function placePoolPolygon(lat, lon){
+  if(leafletPoolPolygon) leafletMap.removeLayer(leafletPoolPolygon);
+  const m = DATA.modelle.find(x=>x.id===state.modell);
+  if(!m) return;
+  // Lat-Differenz pro Meter ~ 0.0000089, Lon-Differenz pro Meter cosinus-korrigiert
+  const dLat = m.b/2 * 0.0000089;
+  const dLon = m.l/2 * (0.0000089 / Math.cos(lat*Math.PI/180));
+  const coords = [[lat-dLat, lon-dLon],[lat-dLat, lon+dLon],[lat+dLat, lon+dLon],[lat+dLat, lon-dLon]];
+  const ba = DATA.bauart.find(b=>b.id===state.bauart);
+  const fillColor = ba.id==='mosaik' ? '#1A6E7E' : (ba.id==='edelstahl' ? '#6FA9B2' : (ba.id==='granicite' ? '#5E7A82' : '#3AA0AE'));
+  leafletPoolPolygon = L.polygon(coords, { color:'#7FC9D5', weight:2.5, opacity:1, fillColor: fillColor, fillOpacity:0.78, smoothFactor:1 }).addTo(leafletMap);
+}
+
+function updateMapPool(){
+  if(leafletMap && leafletPoolPolygon && state.addrCoords) placePoolPolygon(state.addrCoords[0], state.addrCoords[1]);
+}
+
+function switchPreview(which){
+  activePreview = which;
+  document.getElementById('tabGarden').classList.toggle('active', which==='garden');
+  document.getElementById('tabMap').classList.toggle('active', which==='map');
+  document.getElementById('paneGarden').classList.toggle('active', which==='garden');
+  document.getElementById('paneMap').classList.toggle('active', which==='map');
+  if(which==='map' && leafletMap) setTimeout(()=>leafletMap.invalidateSize(), 200);
+}
+
+document.getElementById('btnNext').onclick = ()=>{
+  if(cur<STEPS.length-1){ cur++; refresh(); window.scrollTo({top:0,behavior:'smooth'}); }
+  else { submitForm(); }
+};
+document.getElementById('btnBack').onclick = ()=>{
+  if(cur>0){ cur--; refresh(); window.scrollTo({top:0,behavior:'smooth'}); }
+};
+
+['fVorname','fNachname','fMail','fTel','fPlz','fEigentum','fPrio'].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el){
+    el.addEventListener('input',updateQMeter);
+    el.addEventListener('change',updateQMeter);
+  }
+});
+
+// Enter in Adress-Input löst Suche aus
+document.addEventListener('DOMContentLoaded',()=>{
+  const addrInp = document.getElementById('addrInput');
+  if(addrInp){
+    addrInp.addEventListener('keypress',(e)=>{
+      if(e.key==='Enter'){ e.preventDefault(); lookupAddress(); }
+    });
+  }
+  const inp = document.getElementById('mapSearchInput');
+  if(inp){
+    inp.addEventListener('keypress', async (e)=>{
+      if(e.key==='Enter'){
+        const q = inp.value.trim();
+        if(!q) return;
+        document.getElementById('mapLoad').classList.add('on');
+        try{
+          const result = await geocode(q);
+          if(result){
+            state.addrCoords = [result.lat, result.lon];
+            showMapWithLocation(result.lat, result.lon);
+          }
+        } catch(err){}
+        document.getElementById('mapLoad').classList.remove('on');
+      }
+    });
+  }
+});
+
+function submitForm(){
+  const mail = document.getElementById('fMail').value;
+  const name = document.getElementById('fVorname').value;
+  const consent = document.getElementById('fConsent').checked;
+  if(!name || !/.+@.+\..+/.test(mail)){ showToast('Bitte Name und gültige E-Mail angeben.', true); return; }
+  if(!consent){ showToast('Bitte bestätigen Sie die Einwilligung.', true); return; }
+  showToast('Anfrage gesendet! Wir melden uns binnen 24 Stunden.');
+}
+
+function showToast(msg,isErr){
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.style.background = isErr ? '#B85C2E' : '#386436';
+  t.classList.add('show');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(()=>t.classList.remove('show'),3800);
+}
+
+refresh();
+</script>
+</body>
+</html>
