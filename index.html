@@ -28,7 +28,8 @@ body{font-family:'Mulish',sans-serif;background:var(--void);color:var(--text);fo
 @keyframes drift2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(50px,-40px) scale(1.15);}}
 .app{position:relative;z-index:1;max-width:1220px;margin:0 auto;padding:0 24px 80px;}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:22px 0 18px;border-bottom:1px solid var(--line);gap:16px;flex-wrap:wrap;}
-.brand{display:flex;align-items:center;gap:14px;}
+.brand{display:flex;align-items:center;gap:14px;cursor:pointer;transition:.2s;}
+.brand:hover{opacity:.85;}
 .brand .logo-svg{width:54px;height:54px;flex-shrink:0;}
 .brand .bt{line-height:1.15;}
 .brand .bt .n{font-weight:800;font-size:19px;letter-spacing:.04em;}
@@ -42,7 +43,7 @@ body{font-family:'Mulish',sans-serif;background:var(--void);color:var(--text);fo
 .hero .eyebrow{font-size:11px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;color:var(--pool);margin-bottom:14px;}
 .hero h1{font-weight:800;font-size:46px;line-height:1.08;letter-spacing:-.02em;margin-bottom:13px;}
 .hero h1 .lt{font-weight:200;}
-.hero p{color:var(--muted);font-size:16px;max-width:580px;margin:0 auto;}
+.hero p{color:var(--muted);font-size:16px;max-width:620px;margin:0 auto;}
 .steps{display:flex;align-items:center;justify-content:center;gap:0;margin:30px 0 36px;flex-wrap:wrap;}
 .step-dot{display:flex;align-items:center;gap:10px;cursor:pointer;transition:.3s;padding:6px 4px;}
 .step-dot .sd-n{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;border:2px solid var(--line-s);color:var(--tert);transition:.35s;background:var(--panel);flex-shrink:0;}
@@ -59,6 +60,8 @@ body{font-family:'Mulish',sans-serif;background:var(--void);color:var(--text);fo
 .panel-head .ph-step{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--pool);}
 .panel-head h2{font-weight:800;font-size:26px;margin:5px 0 5px;letter-spacing:-.01em;}
 .panel-head p{color:var(--muted);font-size:13.5px;}
+.brand-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--pool);border:1px solid var(--line-s);background:rgba(109,180,193,.06);padding:5px 11px;border-radius:30px;margin-left:10px;vertical-align:middle;}
+.brand-tag.nordiq{color:#7BB4E5;border-color:rgba(123,180,229,.32);background:rgba(123,180,229,.06);}
 .stage{display:none;animation:fadeIn .45s ease;}
 .stage.show{display:block;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
@@ -78,19 +81,38 @@ body{font-family:'Mulish',sans-serif;background:var(--void);color:var(--text);fo
 .opt .opt-price{margin-top:10px;font-size:12px;font-weight:800;color:var(--pool);letter-spacing:.01em;}
 .opt .opt-tag{position:absolute;top:10px;left:10px;font-size:8.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;background:var(--garten);color:#fff;padding:4px 9px;border-radius:20px;z-index:3;box-shadow:0 4px 12px rgba(0,0,0,.3);}
 .opt .opt-tag.partner{background:var(--pool-dd);}
+.opt .opt-tag.nordiq{background:#3A6FA8;}
 .opt .opt-tag.architektur{background:var(--stone-d);}
 .opt.multi.sel .opt-check{border-radius:6px;}
+
+/* Hersteller-Wahl */
+.brand-choose{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.brand-card{position:relative;background:linear-gradient(165deg,rgba(141,205,216,.06),rgba(141,205,216,.02));border:1.8px solid var(--line);border-radius:18px;padding:28px 24px;cursor:pointer;transition:.25s;overflow:hidden;}
+.brand-card:hover{transform:translateY(-3px);border-color:var(--line-s);}
+.brand-card.sel{border-color:var(--pool);box-shadow:0 0 0 1px var(--pool),0 18px 36px -14px rgba(109,180,193,.5);}
+.brand-card.sel::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--pool),var(--pool-d));}
+.brand-card.nq.sel{border-color:#7BB4E5;box-shadow:0 0 0 1px #7BB4E5,0 18px 36px -14px rgba(123,180,229,.5);}
+.brand-card.nq.sel::before{background:linear-gradient(90deg,#7BB4E5,#3A6FA8);}
+.brand-card .bc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.brand-card h3{font-size:22px;font-weight:800;letter-spacing:-.01em;}
+.brand-card .bc-tier{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;padding:5px 10px;border-radius:20px;}
+.brand-card.rp .bc-tier{background:rgba(109,180,193,.16);color:var(--pool);}
+.brand-card.nq .bc-tier{background:rgba(123,180,229,.16);color:#7BB4E5;}
+.brand-card .bc-desc{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:14px;min-height:62px;}
+.brand-card .bc-bullets{list-style:none;font-size:12.5px;color:var(--muted);}
+.brand-card .bc-bullets li{display:flex;gap:8px;padding:4px 0;}
+.brand-card .bc-bullets li::before{content:"›";color:var(--pool);font-weight:800;flex-shrink:0;}
+.brand-card.nq .bc-bullets li::before{color:#7BB4E5;}
+.brand-card .bc-range{font-size:13px;font-weight:800;color:var(--text);margin-top:14px;padding-top:14px;border-top:1px solid var(--line);}
+.brand-card .bc-range small{font-weight:600;color:var(--tert);font-size:11px;display:block;margin-top:2px;}
+
 .slider-wrap{background:rgba(141,205,216,.04);border:1.6px solid var(--line);border-radius:14px;padding:22px;margin-bottom:16px;}
 .slider-wrap .sw-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;}
 .slider-wrap .sw-label{font-weight:700;font-size:14px;}
 .slider-wrap .sw-val{font-weight:800;font-size:24px;color:var(--pool);}
 .slider-wrap .sw-val small{font-size:13px;color:var(--muted);font-weight:600;}
-input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:5px;background:linear-gradient(90deg,var(--pool-d),var(--pool));outline:none;}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:4px solid var(--pool);cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.4);transition:.15s;}
-input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.14);}
-.slider-wrap .sw-scale{display:flex;justify-content:space-between;font-size:10.5px;color:var(--tert);margin-top:8px;}
 .model-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;}
-.model-pill{background:rgba(141,205,216,.04);border:1.6px solid var(--line);border-radius:12px;padding:14px 12px;cursor:pointer;transition:.2s;text-align:left;}
+.model-pill{background:rgba(141,205,216,.04);border:1.6px solid var(--line);border-radius:12px;padding:14px 12px;cursor:pointer;transition:.2s;text-align:left;position:relative;}
 .model-pill:hover{border-color:var(--line-s);}
 .model-pill.sel{border-color:var(--pool);background:rgba(109,180,193,.13);}
 .model-pill .mp-name{font-size:13px;font-weight:800;margin-bottom:3px;}
@@ -222,7 +244,11 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.14);}
 .stripe i:nth-child(3){background:var(--stone);}
 .info-box{background:rgba(109,180,193,.06);border:1px solid var(--line);border-left:3px solid var(--pool);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:18px;}
 .info-box b{color:var(--text);}
-@media(max-width:980px){.config{grid-template-columns:1fr;}.summary{position:static;}.hero h1{font-size:32px;}.step-dot .sd-l{display:none;}.loc-grid{grid-template-columns:1fr 1fr;}}
+.switch-bar{display:flex;justify-content:center;margin-bottom:22px;}
+.switch-link{font-size:11.5px;color:var(--tert);font-weight:600;background:rgba(141,205,216,.04);border:1px solid var(--line);padding:8px 16px;border-radius:30px;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px;}
+.switch-link:hover{color:var(--pool);border-color:var(--line-s);}
+.switch-link svg{width:12px;height:12px;}
+@media(max-width:980px){.config{grid-template-columns:1fr;}.summary{position:static;}.hero h1{font-size:32px;}.step-dot .sd-l{display:none;}.loc-grid{grid-template-columns:1fr 1fr;}.brand-choose{grid-template-columns:1fr;}}
 @media(max-width:560px){.opt-grid.two,.loc-grid{grid-template-columns:1fr;}.form-grid{grid-template-columns:1fr;}.hero h1{font-size:26px;}.nav-row{flex-direction:column;}.tb-right{font-size:11px;}}
 </style>
 </head>
@@ -230,7 +256,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.14);}
 <div class="bg-wrap"><div class="bg-grad"></div><div class="caustic c1"></div><div class="caustic c2"></div></div>
 <div class="app">
   <div class="topbar">
-    <div class="brand">
+    <div class="brand" onclick="resetAll()" title="Konfigurator zurücksetzen">
       <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <circle cx="50" cy="46" r="36" fill="none" stroke="#A8A5A3" stroke-width="3.6"/>
         <path d="M 36 56 L 42 28 L 48 56 Z" fill="#386436"/>
@@ -253,7 +279,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.14);}
       </div>
     </div>
     <div class="tb-right">
-      <span class="tb-badge">Riviera Premium Partner</span>
+      <span class="tb-badge" id="brandBadge">Riviera & NORDIQ Partner</span>
       <span class="tb-phone">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
         0711 766756
@@ -261,51 +287,97 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.14);}
     </div>
   </div>
   <div class="hero">
-    <div class="eyebrow">Premium Pool-Konfigurator · 7 Schritte</div>
+    <div class="eyebrow">Premium Pool-Konfigurator · 8 Schritte</div>
     <h1>Ihr Pool. <span class="lt">Auf Ihrem Grundstück.</span></h1>
-    <p>Becken, Form, Technik, Ausstattung, Garten — und auf Wunsch direkt visualisiert auf Ihrer Adresse. Mit echten Komponenten aus der Riviera Pools D·Line Preisliste 2026.</p>
+    <p>Zwei Hersteller, zwei Preisklassen: <b style="color:var(--text);font-weight:800;">NORDIQ</b> für den effizienten Einstieg, <b style="color:var(--text);font-weight:800;">Riviera</b> für die Premium-Linie. Beide werkseitig auf Sie zugeschnitten — geliefert, montiert und auf Wunsch direkt auf Ihrem Grundstück visualisiert.</p>
     <div class="stripe" style="max-width:340px;margin:18px auto 0;"><i></i><i></i><i></i></div>
   </div>
   <div class="steps" id="steps"></div>
   <div class="config">
     <div class="panel">
       <div class="panel-head">
-        <div class="ph-step" id="phStep">Schritt 1 von 7</div>
-        <h2 id="phTitle">Die Bauart</h2>
-        <p id="phDesc">Das Becken ist das Herz des Pools.</p>
+        <div class="ph-step" id="phStep">Schritt 1 von 8</div>
+        <h2 id="phTitle">Hersteller wählen</h2>
+        <p id="phDesc">Zwei Welten. Eine Entscheidung. Beide bauen wir mit voller Garantie und Erfahrung.</p>
       </div>
+
       <div class="stage show" data-stage="0">
+        <div class="brand-choose">
+          <div class="brand-card nq" id="brandCardNQ" onclick="selectBrand('nordiq')">
+            <div class="bc-head">
+              <h3>NORDIQ Pools</h3>
+              <span class="bc-tier">Komfort-Linie</span>
+            </div>
+            <div class="bc-desc">Modernes GFK-Einstückbecken, nahtlos geformt. Effiziente TT-Fertigfiltertechnik, kabellose Steuerung, schnelle Montage. Das beste Preis-Leistungs-Verhältnis im Markt.</div>
+            <ul class="bc-bullets">
+              <li>3 Modellgrößen: NQ23 · NQ28 · NQ28XL</li>
+              <li>Tubeless TT-Technik, 12V Niederspannung</li>
+              <li>STRØM oder STREAM Gegenstromanlage</li>
+              <li>NORDIQ Shield Sicherheitsabdeckung</li>
+            </ul>
+            <div class="bc-range">ab ca. 20.000 € <small>Komplett-System ab Werk · zzgl. Montage</small></div>
+          </div>
+          <div class="brand-card rp" id="brandCardRP" onclick="selectBrand('riviera')">
+            <div class="bc-head">
+              <h3>RivieraPool D·Line</h3>
+              <span class="bc-tier">Premium-Linie</span>
+            </div>
+            <div class="bc-desc">Epoxy-Acrylat in 7-Schicht-Sandwich mit Stahleinlagen, 20 J Garantie auf Dichtigkeit. Ezarri-Glasmosaik, RivieraConnect-Steuerung, EVAstream-Schwimmturbinen.</div>
+            <ul class="bc-bullets">
+              <li>16 Modellgrößen: Ancona · Linear · Modena</li>
+              <li>Orbit 1000 Filter, Speck Deluxe ECO VS Pumpe</li>
+              <li>WetLounge, Komplettverfliesung Ezarri</li>
+              <li>Thermosafe Polycarbonat-Abdeckung</li>
+            </ul>
+            <div class="bc-range">ab ca. 40.000 € <small>Komplett-System ab Werk · zzgl. Montage</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage" data-stage="1">
+        <div class="info-box" id="bauartInfo"></div>
         <div class="opt-grid two" id="gridBauart"></div>
       </div>
-      <div class="stage" data-stage="1">
-        <div class="cat-sub">Modell wählen — Riviera D·Line</div>
-        <div class="info-box" id="modelInfo">Wählen Sie zuerst ein Beckenmodell. Die Maße folgen den Original-Größen aus der Riviera-Preisliste 2026.</div>
-        <div class="model-row" id="modelRow"></div>
-        <div class="cat-sub" style="margin-top:22px;">Treppentyp</div>
-        <div class="opt-grid two" id="gridTreppe"></div>
-      </div>
+
       <div class="stage" data-stage="2">
-        <div class="cat-sub">Filteranlage — Riviera Techniksysteme 2026</div>
+        <div class="cat-sub">Modell wählen</div>
+        <div class="info-box" id="modelInfo"></div>
+        <div class="model-row" id="modelRow"></div>
+        <div id="treppeWrap">
+          <div class="cat-sub" style="margin-top:22px;">Treppentyp / Rollladenschacht</div>
+          <div class="opt-grid two" id="gridTreppe"></div>
+        </div>
+      </div>
+
+      <div class="stage" data-stage="3">
+        <div class="cat-sub">Filteranlage</div>
         <div class="opt-grid two" id="gridFilter"></div>
         <div class="cat-sub">Wärmepumpe</div>
         <div class="opt-grid two" id="gridHeizung"></div>
       </div>
-      <div class="stage" data-stage="3">
-        <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px;">Original Riviera-Komponenten zu Preisen der Preisliste 2026. Mehrfachauswahl.</p>
-        <div class="cat-sub">Rollladenabdeckung</div>
+
+      <div class="stage" data-stage="4">
+        <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px;">Mehrfachauswahl. Echte Komponenten zu Preisen der Hersteller-Preislisten 2026.</p>
+        <div class="cat-sub" id="rollladenLabel">Rollladenabdeckung</div>
         <div class="opt-grid two" id="gridRollladen"></div>
         <div class="cat-sub">Gegenstromanlage</div>
         <div class="opt-grid two" id="gridGsa"></div>
-        <div class="cat-sub">Beleuchtung</div>
-        <div class="opt-grid two" id="gridLicht"></div>
-        <div class="cat-sub">Wellness & Komfort</div>
-        <div class="opt-grid two" id="gridWellness"></div>
+        <div id="lichtWrap">
+          <div class="cat-sub">Beleuchtung</div>
+          <div class="opt-grid two" id="gridLicht"></div>
+        </div>
+        <div id="wellnessWrap">
+          <div class="cat-sub">Wellness & Komfort</div>
+          <div class="opt-grid two" id="gridWellness"></div>
+        </div>
       </div>
-      <div class="stage" data-stage="4">
+
+      <div class="stage" data-stage="5">
         <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px;">Aus 12 Jahren Galabau-Erfahrung von Jelić. Mehrfachauswahl. Endgültige Kalkulation nach Vor-Ort-Termin.</p>
         <div class="opt-grid two" id="gridGalabau"></div>
       </div>
-      <div class="stage" data-stage="5">
+
+      <div class="stage" data-stage="6">
         <p style="font-size:13px;color:var(--muted);margin-bottom:18px;">Wir können Ihren Pool direkt auf einer Satellitenkarte auf Ihrem Grundstück einplanen — oder Sie überspringen diesen Schritt.</p>
         <div class="loc-grid">
           <div class="loc-card" id="locSkip" onclick="setLocMode('skip')">
@@ -329,7 +401,8 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.14);}
           <p style="font-size:11px;color:var(--tert);margin-top:12px;line-height:1.5;">Die Karte erscheint in der Vorschau rechts. Klicken Sie auf die Karte, um den Pool exakt zu positionieren. Datenquelle: Photon/OpenStreetMap, Satelliten: ESRI World Imagery.</p>
         </div>
       </div>
-      <div class="stage" data-stage="6">
+
+      <div class="stage" data-stage="7">
         <div class="final-hero">
           <div class="fh-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg></div>
           <h2>Ihr Pool steht.</h2>
@@ -352,11 +425,13 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.14);}
         </div>
         <label class="consent"><input type="checkbox" id="fConsent"><span>Ich bin einverstanden, dass Jelić Galabau meine Angaben speichert und mich kontaktiert.</span></label>
       </div>
+
       <div class="nav-row">
         <button class="btn btn-ghost" id="btnBack" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Zurück</button>
         <button class="btn btn-primary" id="btnNext">Weiter<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
       </div>
     </div>
+
     <div class="summary">
       <div class="sum-card">
         <div class="preview-tabs">
@@ -374,7 +449,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.14);}
               </div>
             </div>
             <div class="pp-label" id="ppLabel">Ihr Pool</div>
-            <div class="pp-dims" id="ppDims">8,0 × 3,7 m</div>
+            <div class="pp-dims" id="ppDims">— × — m</div>
             <div class="pp-feat light" id="featLight" style="bottom:54px;left:46%;"></div>
             <div class="pp-feat" id="featCover" style="top:62px;right:30%;"></div>
             <div class="pp-feat" id="featJet" style="top:90px;left:18%;"></div>
@@ -396,132 +471,259 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.14);}
         </div>
         <div class="sum-body">
           <h3>IHRE KONFIGURATION</h3>
-          <div class="sum-tier" id="sumTier">Komfort-Linie · Jelić Pools</div>
+          <div class="sum-tier" id="sumTier">Bitte Hersteller wählen</div>
           <ul class="sum-list" id="sumList"></ul>
         </div>
         <div class="sum-total">
           <div class="st-row"><span class="st-label">Preisrahmen</span><span class="st-val" id="stVal">— <small>€</small></span></div>
-          <div class="st-note" id="stNote">Basis: Riviera-Preisliste 2026 ab Werk · zzgl. Montage, Erdarbeiten, Anschlüsse · Festpreis nach Vor-Ort-Termin</div>
-          <div class="st-range"><i id="stRange" style="left:20%;width:40%;"></i></div>
+          <div class="st-note" id="stNote">Basis: Hersteller-Preisliste 2026 ab Werk · zzgl. Montage, Erdarbeiten, Anschlüsse · Festpreis nach Vor-Ort-Termin</div>
+          <div class="st-range"><i id="stRange" style="left:0;width:0;"></i></div>
         </div>
       </div>
-      <div class="foot-note"><b>Kostenlos & unverbindlich.</b> Preise basieren auf der offiziellen Riviera-Preisliste 2026<br>(Verkaufspreise ab Werk inkl. 19% MwSt.) und sind Orientierungsrahmen.<br>Verbindlicher Festpreis inkl. Montage folgt nach Vor-Ort-Termin.</div>
+      <div class="foot-note"><b>Kostenlos & unverbindlich.</b> Preise basieren auf den offiziellen<br>NORDIQ- und RivieraPool-Preislisten 2026 (inkl. 19% MwSt., ab Werk).<br>Verbindlicher Festpreis inkl. Montage folgt nach Vor-Ort-Termin.</div>
     </div>
   </div>
 </div>
 <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6L9 17l-5-5"/></svg><span id="toastMsg">Anfrage gesendet!</span></div>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
-// ========== DATA: ECHTE RIVIERA-PREISLISTE 2026 ==========
+// ============================================================
+// DATEN — NORDIQ + RIVIERA, alle Preise aus offiziellen Listen 2026
+// ============================================================
+
 const DATA = {
-  // Bauarten = Oberflächenausführung des Riviera-Beckens
-  bauart: [
-    { id:'farbe', name:'Beckenfarbe Premium', tag:'Standard', desc:'Original Riviera Epoxy-Acrylat Oberfläche in Papyrus, Silbergrau, Meerblau oder Beach. Porenlos, hygienisch, 20 Jahre Garantie auf Dichtigkeit.', price:0, vis:'farbe', priceLabel:'inklusive' },
-    { id:'granicite', name:'Granicite Steingrau', tag:'Mittelklasse', desc:'Strukturierte Stein-Optik in der Beckenwand. Edel-matte Anmutung, frostfest, hochwertig. Aufpreis ggü. Standardfarbe ca. 2.500-5.700 €.', price:3500, vis:'granicite', priceLabel:'+ ca. 3.500 €' },
-    { id:'mosaik', name:'Ezarri Glasmosaik', tag:'Signature · Riviera', desc:'Komplettverfliesung mit Ezarri-Glasmosaik werkseitig verfugt. Serien Zen, Iridescent, Metal, Space, Cocktail. Die edelste Riviera-Oberfläche, je nach Beckengröße 19.000-46.000 € Aufpreis.', price:24000, vis:'mosaik', priceLabel:'+ ca. 24.000 €' },
-    { id:'edelstahl', name:'Edelstahl V4A', tag:'Architektur', desc:'Becken aus gebürstetem V4A-Edelstahl. Architektonisch, extrem langlebig, unverwechselbarer Charakter. Sonderbau außerhalb der Riviera-Linie.', price:62000, vis:'edelstahl', priceLabel:'ab 62.000 €' }
-  ],
-  // Modelle aus realer Preisliste (Papyrus-Basispreise, inkl. 19% MwSt., ab Werk)
-  // Format: [Modell-ID, Anzeigename, Länge, Breite, Tiefe, Basispreis Papyrus]
-  modelle: [
-    // ANCONA - Treppe stirnseitig
-    { id:'anc-550', linie:'ancona', name:'Ancona 550/270', l:5.5, b:2.7, t:1.5, preis:15980 },
-    { id:'anc-650', linie:'ancona', name:'Ancona 650/320', l:6.5, b:3.2, t:1.5, preis:19810 },
-    { id:'anc-800-320', linie:'ancona', name:'Ancona 800/320', l:8.0, b:3.2, t:1.5, preis:22360 },
-    { id:'anc-800-370', linie:'ancona', name:'Ancona 800/370', l:8.0, b:3.7, t:1.5, preis:30420 },
-    { id:'anc-1000', linie:'ancona', name:'Ancona 1000/370', l:9.94, b:3.7, t:1.5, preis:34480 },
-    // LINEAR - Treppe stirnseitig, klare Linien
-    { id:'lin-700', linie:'linear', name:'Linear 700/320', l:6.9, b:3.2, t:1.5, preis:20580 },
-    { id:'lin-800', linie:'linear', name:'Linear 800/320', l:7.9, b:3.2, t:1.5, preis:23560 },
-    { id:'lin-745', linie:'linear', name:'Linear 745/370', l:7.4, b:3.7, t:1.5, preis:30110 },
-    { id:'lin-845', linie:'linear', name:'Linear 845/370', l:8.4, b:3.7, t:1.5, preis:32050 },
-    { id:'lin-945', linie:'linear', name:'Linear 945/370', l:9.4, b:3.7, t:1.5, preis:34030 },
-    { id:'lin-1045', linie:'linear', name:'Linear 1045/370', l:10.4, b:3.7, t:1.5, preis:35990 },
-    // MODENA - Sitzbereich + Treppe längsseits, Familienpool
-    { id:'mod-725', linie:'modena', name:'Modena 725/320', l:7.25, b:3.2, t:1.5, preis:21620 },
-    { id:'mod-825', linie:'modena', name:'Modena 825/320', l:8.25, b:3.2, t:1.5, preis:23760 },
-    { id:'mod-775', linie:'modena', name:'Modena 775/370', l:7.75, b:3.7, t:1.5, preis:30660 },
-    { id:'mod-875', linie:'modena', name:'Modena 875/370', l:8.75, b:3.7, t:1.5, preis:32610 },
-    { id:'mod-975', linie:'modena', name:'Modena 975/370', l:9.75, b:3.7, t:1.5, preis:34570 }
-  ],
-  // Treppentyp
-  treppe: [
-    { id:'standard', name:'Standard-Treppe', desc:'Im gewählten Modell bereits enthalten. 4-5 stufig, rutschhemmend profiliert, je nach Linie stirnseitig oder seitlich.', price:0, base:true },
-    { id:'integra', name:'Rollladenschacht Integra 2-13', tag:'Empfohlen', desc:'Verlängert das Becken um 48 cm. Klappbare Sitzbank, ermöglicht hohen Wasserspiegel. Original Riviera. Preis je nach Beckenbreite 5.235-6.375 €.', price:6375, riviera:true },
-    { id:'wetlounge', name:'WetLounge „RS"', tag:'Signature', desc:'Verlängert das Becken um 145 cm. Flachwasser-Sitz-/Liegebereich + integrierter Rollladen. Das Premium-Highlight. Je nach Beckenbreite 6.125-7.010 €.', price:7010, riviera:true }
-  ],
-  // Filteranlagen aus Techniksysteme-Preisliste 2026
-  filter: [
-    { id:'innen', name:'Technikträger Innen', desc:'Riviera Technikträger zur Montage im Innenraum. Orbit 1000 Filter, Speck Deluxe ECO VS Pumpe, Besgo 5-Wege-Ventil, AFM-Filtermaterial. 170×75×150 cm.', price:10140, riviera:true },
-    { id:'innen-connect', name:'Innen + RivieraConnect 1.1', desc:'Technikträger Innen mit voller Connect-Steuerung — App, Smart Dial, intelligente Heizungssteuerung, Solar-Vorrang.', price:13590, riviera:true },
-    { id:'aussen', name:'Technikschrank Außen', desc:'Riviera Technikschrank, Aluminiumrahmen RAL7016, 40mm Sandwichpanels, Gasdruckdämpfer. 200×100×105 cm, ca. 330 kg.', price:12140, riviera:true },
-    { id:'aussen-connect', name:'Außen + RivieraConnect 1.1', tag:'Empfohlen', desc:'Technikschrank Außen mit voller Connect-Steuerung. Komfort, Wetterschutz und Intelligenz vereint.', price:15590, riviera:true }
-  ],
-  // Wärmepumpe aus Techniksysteme-Preisliste 2026
-  heizung: [
-    { id:'keine', name:'Ohne Heizung', desc:'Natürliche Erwärmung über Sonne. Jederzeit nachrüstbar.', price:0, base:true },
-    { id:'hkr100', name:'HKR 100s Luftwärmepumpe', desc:'Titan-Wärmetauscher (10 J Gewährleistung), R410A, Heißgasabtauung, automatisches Heizen und Kühlen. Verlängert die Saison März-Oktober.', price:1750 },
-    { id:'hkr140', name:'HKR 140s Luftwärmepumpe', tag:'Größere Becken', desc:'Stärkere Variante für 370er Becken und schnellere Aufheizung. Identische Features wie HKR 100s, höhere Leistung.', price:2150 }
-  ],
-  // Rollladenabdeckung
-  rollladen: [
-    { id:'pvc-grau', name:'PVC Grau (Standard)', desc:'Basis-Abdeckung aus Hohlkammerprofilen, grau. Sicherheit und Wärmespeicher. Preis je nach Beckengröße 3.860-4.580 €.', price:3990, riviera:true },
-    { id:'pvc-solar', name:'PVC Solar', desc:'Solar-aktive Abdeckung, schwarz/transluzent. Spürbarer Wärmegewinn an Sonnentagen. 5.450-6.490 €.', price:5450, riviera:true },
-    { id:'pc-solar', name:'Polycarbonat Solar (Thermosafe)', tag:'Empfohlen', desc:'Hochwertiges Polycarbonat mit Anti-Algen-Profil. Hagelresistent. Original Riviera Thermosafe. 8.390-10.010 €.', price:8390, riviera:true },
-    { id:'pc-silber', name:'Polycarbonat Silber bedampft', tag:'Edelstahl-Look', desc:'Polycarbonat mit silberner Bedampfung — der „Edelstahl-Look". Modern und elegant. 9.060-10.800 €.', price:9060, riviera:true }
-  ],
-  // Gegenstromanlage
-  gsa: [
-    { id:'twinjet', name:'Twinjet Doppeldüsenanlage', desc:'Bewährte Pumpentechnologie, kraftvoller Wasserstrahl, Doppeldüse 2,6 kW. Für Dauerschwimmen.', price:7790, riviera:true },
-    { id:'rivierajet', name:'Riviera Jet Turbinenanlage', tag:'Empfohlen', desc:'12 V Niederspannung, vollintegriert mit Edelstahlblende, Volumenstrom 240 m³/h, 5-stufig regelbar, 5 Trainingsmodi. App-fähig.', price:12950, riviera:true },
-    { id:'evastream350', name:'EVAstream NEXT 350', tag:'Sportschwimmen Plus', desc:'1,7 kW Turbine, 350 m³/h, 8,5 m/s. Inkl. App-Steuerung. Profi-Niveau.', price:18950, riviera:true },
-    { id:'komfortjet300', name:'Komfortjet 300 m³', desc:'GFK-Gegenschwimmanlage, breite Schlitzdüse, 1.200 W, 300 m³/h. Naturnahe Strömung.', price:15950, riviera:true }
-  ],
-  // Beleuchtung
-  licht: [
-    { id:'s-ww', name:'Lichtpaket S (Warmweiß)', desc:'1 Scheinwerfer S1 in der Treppe, 60 W LED Warmweiß, 5.000 lm. Riviera Standard Classic poliert.', price:1425, riviera:true },
-    { id:'s-rgb', name:'Lichtpaket S (RGB-WW)', tag:'Farblicht', desc:'1 Scheinwerfer S1, 70 W LED RGB-WW. Inkl. Schaltkasten mit Fernbedienung.', price:2370, riviera:true },
-    { id:'m-rgb', name:'Lichtpaket M (2× RGB-WW)', desc:'2 Scheinwerfer R1, ø170 mm, 40 W RGB-WW. DMX-fähig, Schaltkasten mit Fernbedienung.', price:3525, riviera:true },
-    { id:'l-rgb', name:'Lichtpaket L (RGB-WW + 2 Spots)', tag:'Empfohlen', desc:'1 Scheinwerfer S1 + 2 zusätzliche R2 Spots, alle RGB-WW. Dramatische Beleuchtung.', price:4150, riviera:true }
-  ],
-  // Wellness & Komfort - Multi-Select
-  wellness: [
-    { id:'fun-pak', name:'FUN PAK Massageanlage', desc:'Strömungs- und Massageanlage mit doppelstrahliger GSA 2,6 kW, 2 Maritim-Düsen, 6 Microjets, 1 Bodengeysir + Unterbauschacht mit Echtholz-Kebony-Abdeckung. Für Modena.', price:16770, riviera:true },
-    { id:'massagestand', name:'Massagestand 4 Superjets', desc:'Massageanlage mit 4 Superjets, 38 m³/h, 2,2 kW Pumpe, inkl. 2m Edelstahl-Haltestange. Für gezielte Körpermassage.', price:7875, riviera:true },
-    { id:'luftsprudel', name:'Luftsprudelplatte', desc:'Bodensprudel mit Seitenkanalgebläse 0,85 kW. Sanfte, prickelnde Massage durch Luftbläschen.', price:3960, riviera:true },
-    { id:'luftsitzbank', name:'Luftsprudelsitzbank', desc:'Sitzbank mit eingelassenem Luftkanal + Piezotaster, Gebläse 0,85 kW. Erfrischende Körpermassage.', price:4605, riviera:true },
-    { id:'ambiente-rgb', name:'Ambiente-Lichtvoute RGB-WW', desc:'4× ø100 mm HT-LED-Scheinwerfer RGB-WW im Rollladenschacht. Stimmungslicht entlang der Beckenseite. Setzt einen Rollladenschacht voraus.', price:2740, riviera:true },
-    { id:'wintercover', name:'Winter-Sicherheitsabdeckung', desc:'Sicherheitsabdeckung aus hochfester Folie in Grau, Aluminiumrohre für Schneelast, Handkurbel, versenkbare Bodenanker. Schützt Pool und Rollladen.', price:6600, riviera:true }
-  ],
-  // Galabau - eigene Jelić-Leistungen, vorläufige Schätzwerte
+  // ---------- NORDIQ Pools (Komfort-Linie) ----------
+  nordiq: {
+    bauart: [
+      { id:'lightgrey', name:'Lightgrey / Papyrus', tag:'Standard', desc:'Original NORDIQ GFK-Oberfläche in heller Papyrus-Optik. Nahtlos geformt aus fiberglas-verstärktem Vinylesterharz.', price:0, vis:'farbe', priceLabel:'inklusive' },
+      { id:'silvergrey', name:'Silvergrey / Silbergrau', tag:'Aufpreis', desc:'Edle Silbergrau-Variante. Modernes, kühles Wasserbild. Aufpreis je nach Beckengröße 950-1.385 €.', price:1151, vis:'granicite', priceLabel:'+ 950-1.385 €' }
+    ],
+    modelle: [
+      { id:'nq23', name:'NORDIQ 23', l:5.2, b:2.3, t:1.4, preisLG:12630, preisSG:13580, volumen:13 },
+      { id:'nq28', name:'NORDIQ 28', l:6.0, b:2.8, t:1.4, preisLG:15350, preisSG:16501, volumen:17 },
+      { id:'nq28xl', name:'NORDIQ 28XL', l:7.5, b:2.8, t:1.4, preisLG:18486, preisSG:19871, volumen:19 }
+    ],
+    treppe: [
+      { id:'standard', name:'Standard 4-Stufen-Einstieg', desc:'Im Becken bereits enthalten: 4-stufiger Einstieg, Flachwasserzone und Sitzbank. Klares NORDIQ-Designprinzip.', price:0, base:true }
+    ],
+    technikschacht: [
+      { id:'gross', name:'Großer Technikschacht', desc:'Zur Montage am NORDIQ Beckenkörper. Aufnahme für Elektropaneel und GSA-Pumpe. DN 100 KG-Rohr zur Schachtentwässerung.', price:720, nordiq:true },
+      { id:'anlaminiert', name:'Anlaminierter Technikschacht + Vorinstallation', tag:'Empfohlen', desc:'Technikschacht wird im Werk anlaminiert — fester Bestandteil vom Becken. Ideal bei Grundwasser oder vorinstallierter Technik. Inkl. Werks-Vorinstallation der Technik (1.050 €).', price:1710, nordiq:true }
+    ],
+    filter: [
+      { id:'tt-white', name:'TT-Fertigfiltertechnik PolarWhite', desc:'Tubeless Technology: 2× Filterpumpe 12V, 2× Filterkartuschen RD50, 2× Schwimm-Skimmer, blendfreies LED Licht kaltweiss 45W, Zeitschaltuhr, Sicherheitsüberlauf.', price:3950, nordiq:true },
+      { id:'tt-rgb', name:'TT-Fertigfiltertechnik RGB', desc:'Identisch wie PolarWhite, aber mit RGB-Lichtsteuerung statt kaltweiss. Stimmungslicht in 16 Mio Farben.', price:4485, nordiq:true },
+      { id:'tt-black', name:'TT-Fertigfiltertechnik MidnightBlack', tag:'Design', desc:'Schwarze Designvariante der TT-Einheit, sonst identisch zur PolarWhite. Optisch unauffällig im dunklen Becken.', price:3950, nordiq:true }
+    ],
+    heizung: [
+      { id:'keine', name:'Ohne Heizung', desc:'Natürliche Erwärmung. Jederzeit nachrüstbar.', price:0, base:true },
+      { id:'wp8kw', name:'NORDIQ Wärmepumpe 8kW', tag:'Empfohlen', desc:'Luft-Wärmepumpe mit ActiveBypass-Zirkulation. 8,9 kW Heizleistung, 1,45 kW Aufnahme, ab 10°C Außentemperatur. Inkl. NORDIQ IPX Pumpe + Verrohrung.', price:3226, nordiq:true }
+    ],
+    rollladen: [
+      { id:'shield', name:'NORDIQ Shield Sicherheitsabdeckung', tag:'Empfohlen', desc:'Hochfeste Folie mit Aluminiumprofilen, öffnen per Gurtzug, schließen per Handkurbel. Schützt vor Verschmutzung, reduziert Verdunstung. Konform NF P 90-308. Preis je Modell: NQ23 2.659 € / NQ28 2.814 € / NQ28XL 3.388 €.', price:2814, nordiq:true },
+      { id:'shield-scoot', name:'Shield + SCOOT Aufrollsystem', tag:'Komfort', desc:'Wie Shield, plus motorisiertes Aufrollsystem mit Akku, Aufrollzeit 8m/50s, 40 Zyklen pro Ladung. Bedienung im Stehen.', price:4494, nordiq:true }
+    ],
+    gsa: [
+      { id:'keine', name:'Ohne Gegenstromanlage', desc:'Reines Schwimmbecken ohne Trainings-Strömung. Nachrüstung später möglich.', price:0, base:true },
+      { id:'strom', name:'NORDIQ STRØM', desc:'Pumpen-GSA mit 1,5 kW. Direktverrohrung, minimaler Strömungswiderstand, Luftbeimischung möglich. Bewährtes Konzept.', price:2650, nordiq:true },
+      { id:'stream', name:'NORDIQ STREAM Turbinenschwimmanlage', tag:'Premium', desc:'Full-Inverter-Turbo Technologie, bis 4,7 m/s Strömung, stufenlos regelbar, App-Steuerung via WLAN. Für Sportschwimmer und Reha.', price:8350, nordiq:true }
+    ],
+    wellness: [
+      { id:'app', name:'NORDIQ TT App-Modul', desc:'Intelligente Steuerung via iOS-App: Filterzeiten, Licht, GSA, Zirkulation, Temperatur. LAN-Anschluss, Fallback über PN-Druckschalter. Nur bei Neubestellung.', price:1905, nordiq:true },
+      { id:'cleango', name:'NORDIQ Clean & Go Set', desc:'Teleskopstange + Käscher-Aufsatz + Bürsten-Aufsatz. Manuelle Grundreinigung — Oberfläche, Boden, Wände.', price:100, nordiq:true },
+      { id:'roboter', name:'Poolroboter AquaSense 2', desc:'Kabelloser 3-in-1 Poolroboter: Boden, Wände, Wasserlinie. CleverNav Navigation mit 16 Sensoren, App-Steuerung, Akku 10.000 mAh.', price:1350, nordiq:true },
+      { id:'st-set', name:'ST-Set Standard-Zubehör', desc:'Grundausstattung: Wasserpflege-Set, Filterkartuschen-Reinigungssystem, AquaCheck-Teststreifen.', price:320, nordiq:true }
+    ]
+  },
+
+  // ---------- RivieraPool D·Line (Premium-Linie) ----------
+  riviera: {
+    bauart: [
+      { id:'farbe', name:'Beckenfarbe Premium', tag:'Standard', desc:'Original Riviera Epoxy-Acrylat Oberfläche in Papyrus, Silbergrau, Meerblau oder Beach. Porenlos, hygienisch, 20 Jahre Garantie auf Dichtigkeit.', price:0, vis:'farbe', priceLabel:'inklusive' },
+      { id:'granicite', name:'Granicite Steingrau', tag:'Mittelklasse', desc:'Strukturierte Stein-Optik in der Beckenwand. Edel-matte Anmutung, frostfest. Aufpreis je nach Beckengröße 2.500-5.700 €.', price:3500, vis:'granicite', priceLabel:'+ ca. 3.500 €' },
+      { id:'mosaik', name:'Ezarri Glasmosaik', tag:'Signature · Riviera', desc:'Komplettverfliesung mit Ezarri-Glasmosaik werkseitig verfugt. Serien Zen, Iridescent, Metal, Space, Cocktail. Die edelste Riviera-Oberfläche.', price:24000, vis:'mosaik', priceLabel:'+ ca. 24.000 €' },
+      { id:'edelstahl', name:'Edelstahl V4A', tag:'Architektur', desc:'Becken aus gebürstetem V4A-Edelstahl. Architektonisch, extrem langlebig, unverwechselbar. Sonderbau außerhalb der Riviera-Linie.', price:62000, vis:'edelstahl', priceLabel:'ab 62.000 €' }
+    ],
+    modelle: [
+      { id:'anc-550', linie:'ancona', name:'Ancona 550/270', l:5.5, b:2.7, t:1.5, preis:15980 },
+      { id:'anc-650', linie:'ancona', name:'Ancona 650/320', l:6.5, b:3.2, t:1.5, preis:19810 },
+      { id:'anc-800-320', linie:'ancona', name:'Ancona 800/320', l:8.0, b:3.2, t:1.5, preis:22360 },
+      { id:'anc-800-370', linie:'ancona', name:'Ancona 800/370', l:8.0, b:3.7, t:1.5, preis:30420 },
+      { id:'anc-1000', linie:'ancona', name:'Ancona 1000/370', l:9.94, b:3.7, t:1.5, preis:34480 },
+      { id:'lin-700', linie:'linear', name:'Linear 700/320', l:6.9, b:3.2, t:1.5, preis:20580 },
+      { id:'lin-800', linie:'linear', name:'Linear 800/320', l:7.9, b:3.2, t:1.5, preis:23560 },
+      { id:'lin-745', linie:'linear', name:'Linear 745/370', l:7.4, b:3.7, t:1.5, preis:30110 },
+      { id:'lin-845', linie:'linear', name:'Linear 845/370', l:8.4, b:3.7, t:1.5, preis:32050 },
+      { id:'lin-945', linie:'linear', name:'Linear 945/370', l:9.4, b:3.7, t:1.5, preis:34030 },
+      { id:'lin-1045', linie:'linear', name:'Linear 1045/370', l:10.4, b:3.7, t:1.5, preis:35990 },
+      { id:'mod-725', linie:'modena', name:'Modena 725/320', l:7.25, b:3.2, t:1.5, preis:21620 },
+      { id:'mod-825', linie:'modena', name:'Modena 825/320', l:8.25, b:3.2, t:1.5, preis:23760 },
+      { id:'mod-775', linie:'modena', name:'Modena 775/370', l:7.75, b:3.7, t:1.5, preis:30660 },
+      { id:'mod-875', linie:'modena', name:'Modena 875/370', l:8.75, b:3.7, t:1.5, preis:32610 },
+      { id:'mod-975', linie:'modena', name:'Modena 975/370', l:9.75, b:3.7, t:1.5, preis:34570 }
+    ],
+    treppe: [
+      { id:'standard', name:'Standard-Treppe', desc:'Im gewählten Modell bereits enthalten. 4-5 stufig, rutschhemmend profiliert, je nach Linie stirnseitig oder seitlich.', price:0, base:true },
+      { id:'integra', name:'Rollladenschacht Integra 2-13', tag:'Empfohlen', desc:'Verlängert das Becken um 48 cm. Klappbare Sitzbank, ermöglicht hohen Wasserspiegel. Preis je nach Beckenbreite 5.235-6.375 €.', price:6375, riviera:true },
+      { id:'wetlounge', name:'WetLounge „RS"', tag:'Signature', desc:'Verlängert das Becken um 145 cm. Flachwasser-Sitz-/Liegebereich + integrierter Rollladen. Das Premium-Highlight. 6.125-7.010 €.', price:7010, riviera:true }
+    ],
+    filter: [
+      { id:'innen', name:'Technikträger Innen', desc:'Riviera Technikträger für Innenraum. Orbit 1000 Filter, Speck Deluxe ECO VS Pumpe, Besgo 5-Wege-Ventil, AFM-Filtermaterial.', price:10140, riviera:true },
+      { id:'innen-connect', name:'Innen + RivieraConnect 1.1', desc:'Technikträger Innen mit voller Connect-Steuerung — App, Smart Dial, intelligente Heizungssteuerung, Solar-Vorrang.', price:13590, riviera:true },
+      { id:'aussen', name:'Technikschrank Außen', desc:'Riviera Technikschrank, Aluminiumrahmen RAL7016, 40mm Sandwichpanels, Gasdruckdämpfer. 200×100×105 cm.', price:12140, riviera:true },
+      { id:'aussen-connect', name:'Außen + RivieraConnect 1.1', tag:'Empfohlen', desc:'Technikschrank Außen mit voller Connect-Steuerung. Komfort, Wetterschutz und Intelligenz vereint.', price:15590, riviera:true }
+    ],
+    heizung: [
+      { id:'keine', name:'Ohne Heizung', desc:'Natürliche Erwärmung über Sonne. Jederzeit nachrüstbar.', price:0, base:true },
+      { id:'hkr100', name:'HKR 100s Luftwärmepumpe', desc:'Titan-Wärmetauscher (10 J Gewährleistung), R410A, Heißgasabtauung, automatisches Heizen und Kühlen.', price:1750, riviera:true },
+      { id:'hkr140', name:'HKR 140s Luftwärmepumpe', tag:'Größere Becken', desc:'Stärkere Variante für 370er Becken und schnellere Aufheizung. Identische Features, höhere Leistung.', price:2150, riviera:true }
+    ],
+    rollladen: [
+      { id:'pvc-grau', name:'PVC Grau (Standard)', desc:'Basis-Abdeckung aus Hohlkammerprofilen. Sicherheit und Wärmespeicher. 3.860-4.580 €.', price:3990, riviera:true },
+      { id:'pvc-solar', name:'PVC Solar', desc:'Solar-aktive Abdeckung. Spürbarer Wärmegewinn an Sonnentagen. 5.450-6.490 €.', price:5450, riviera:true },
+      { id:'pc-solar', name:'Polycarbonat Solar (Thermosafe)', tag:'Empfohlen', desc:'Hochwertiges Polycarbonat mit Anti-Algen-Profil. Hagelresistent. 8.390-10.010 €.', price:8390, riviera:true },
+      { id:'pc-silber', name:'Polycarbonat Silber bedampft', tag:'Edelstahl-Look', desc:'Polycarbonat mit silberner Bedampfung — „Edelstahl-Look". 9.060-10.800 €.', price:9060, riviera:true }
+    ],
+    gsa: [
+      { id:'keine', name:'Ohne Gegenstromanlage', desc:'Reines Schwimmbecken ohne Trainings-Strömung. Nachrüstung später möglich.', price:0, base:true },
+      { id:'twinjet', name:'Twinjet Doppeldüsenanlage', desc:'Bewährte Pumpentechnologie, kraftvoller Wasserstrahl, Doppeldüse 2,6 kW.', price:7790, riviera:true },
+      { id:'rivierajet', name:'Riviera Jet Turbinenanlage', tag:'Empfohlen', desc:'12 V Niederspannung, vollintegriert, 240 m³/h, 5-stufig, 5 Trainingsmodi. App-fähig.', price:12950, riviera:true },
+      { id:'evastream350', name:'EVAstream NEXT 350', tag:'Sportschwimmen Plus', desc:'1,7 kW Turbine, 350 m³/h, 8,5 m/s. Inkl. App-Steuerung. Profi-Niveau.', price:18950, riviera:true },
+      { id:'komfortjet300', name:'Komfortjet 300 m³', desc:'GFK-Gegenschwimmanlage, breite Schlitzdüse, 1.200 W, 300 m³/h. Naturnahe Strömung.', price:15950, riviera:true }
+    ],
+    licht: [
+      { id:'s-ww', name:'Lichtpaket S (Warmweiß)', desc:'1 Scheinwerfer S1 in der Treppe, 60 W LED Warmweiß, 5.000 lm. Riviera Standard Classic poliert.', price:1425, riviera:true },
+      { id:'s-rgb', name:'Lichtpaket S (RGB-WW)', tag:'Farblicht', desc:'1 Scheinwerfer S1, 70 W LED RGB-WW. Inkl. Schaltkasten mit Fernbedienung.', price:2370, riviera:true },
+      { id:'m-rgb', name:'Lichtpaket M (2× RGB-WW)', desc:'2 Scheinwerfer R1, ø170 mm, 40 W RGB-WW. DMX-fähig, Schaltkasten mit Fernbedienung.', price:3525, riviera:true },
+      { id:'l-rgb', name:'Lichtpaket L (RGB-WW + 2 Spots)', tag:'Empfohlen', desc:'1 Scheinwerfer S1 + 2 R2 Spots, alle RGB-WW. Dramatische Beleuchtung.', price:4150, riviera:true }
+    ],
+    wellness: [
+      { id:'fun-pak', name:'FUN PAK Massageanlage', desc:'Strömungs- und Massageanlage 2,6 kW + 2 Maritim-Düsen, 6 Microjets, 1 Bodengeysir + Echtholz-Kebony-Abdeckung. Speziell für Modena.', price:16770, riviera:true },
+      { id:'massagestand', name:'Massagestand 4 Superjets', desc:'4 Superjets, 38 m³/h, 2,2 kW Pumpe + 2m Edelstahl-Haltestange. Gezielte Körpermassage.', price:7875, riviera:true },
+      { id:'luftsprudel', name:'Luftsprudelplatte', desc:'Bodensprudel mit Seitenkanalgebläse 0,85 kW. Sanfte Massage durch Luftbläschen.', price:3960, riviera:true },
+      { id:'luftsitzbank', name:'Luftsprudelsitzbank', desc:'Sitzbank mit Luftkanal + Piezotaster, Gebläse 0,85 kW. Erfrischende Körpermassage.', price:4605, riviera:true },
+      { id:'ambiente-rgb', name:'Ambiente-Lichtvoute RGB-WW', desc:'4× HT-LED-Scheinwerfer RGB-WW im Rollladenschacht. Setzt Rollladenschacht voraus.', price:2740, riviera:true },
+      { id:'wintercover', name:'Winter-Sicherheitsabdeckung', desc:'Hochfeste Folie in Grau, Aluminiumrohre für Schneelast, Handkurbel, versenkbare Bodenanker.', price:6600, riviera:true }
+    ]
+  },
+
+  // ---------- JELIĆ Galabau (für beide Hersteller identisch) ----------
   galabau: [
-    { id:'terrasse', name:'Naturstein-Terrasse', desc:'Umlaufende Terrasse aus Travertin oder Granit. Frostsicher, rutschhemmend. Der edle Rahmen ums Becken. Vorläufiger Schätzwert, exakte Kalkulation nach Vor-Ort-Termin.', price:9500, jelic:true },
-    { id:'holzdeck', name:'Premium-Holzdeck', desc:'Sonnendeck aus Bangkirai oder Thermoesche. Warm unter den Füßen, langlebig, edel patiniert. Vorläufiger Schätzwert.', price:7200, jelic:true },
-    { id:'mauer', name:'Natursteinmauer trocken', desc:'Trockenmauer aus Muschelkalk oder Jura. Sicht- und Windschutz. Strukturiert den Gartenraum. Vorläufiger Schätzwert.', price:6400, jelic:true },
-    { id:'bepflanzung', name:'Mediterrane Bepflanzung', desc:'Gräser, Oliven, Lavendel, Pampasgras — die Pool-Landschaft als grünes Gesamtbild. Vorläufiger Schätzwert.', price:4800, jelic:true },
-    { id:'outdoor', name:'Outdoor-Dusche & Lounge', desc:'Gemauerte Dusche mit Anschluss, angelegte Lounge-Fläche mit Pflanzbeeten. Vorläufiger Schätzwert.', price:5600, jelic:true },
-    { id:'gartenlicht', name:'Garten-Lichtkonzept', desc:'Wegeleuchten, Spots, indirekte Beleuchtung im Pflanzbeet. Der Garten lebt auch nachts. Vorläufiger Schätzwert.', price:3900, jelic:true }
+    { id:'terrasse', name:'Naturstein-Terrasse', desc:'Umlaufende Terrasse aus Travertin oder Granit. Frostsicher, rutschhemmend. Vorläufiger Schätzwert.', price:9500, jelic:true },
+    { id:'holzdeck', name:'Premium-Holzdeck', desc:'Sonnendeck aus Bangkirai oder Thermoesche. Warm, langlebig, edel patiniert. Vorläufiger Schätzwert.', price:7200, jelic:true },
+    { id:'mauer', name:'Natursteinmauer trocken', desc:'Trockenmauer aus Muschelkalk oder Jura. Sicht- und Windschutz. Vorläufiger Schätzwert.', price:6400, jelic:true },
+    { id:'bepflanzung', name:'Mediterrane Bepflanzung', desc:'Gräser, Oliven, Lavendel, Pampasgras. Vorläufiger Schätzwert.', price:4800, jelic:true },
+    { id:'outdoor', name:'Outdoor-Dusche & Lounge', desc:'Gemauerte Dusche mit Anschluss, Lounge-Fläche mit Pflanzbeeten. Vorläufiger Schätzwert.', price:5600, jelic:true },
+    { id:'gartenlicht', name:'Garten-Lichtkonzept', desc:'Wegeleuchten, Spots, indirekte Beleuchtung im Pflanzbeet. Vorläufiger Schätzwert.', price:3900, jelic:true }
   ]
 };
 
-const STEPS = ['Bauart','Modell & Treppe','Technik','Ausstattung','Garten','Standort','Anfrage'];
-let cur = 0, leafletMap = null, leafletPoolPolygon = null;
-let locMode = 'none', activePreview = 'garden';
-const state = {
-  bauart: 'farbe',
-  modell: 'lin-845',
-  treppe: 'integra',
-  filter: 'aussen-connect',
-  heizung: 'hkr100',
-  rollladen: 'pc-solar',
-  gsa: 'rivierajet',
-  licht: 'm-rgb',
-  wellness: [],
-  galabau: [],
-  addrCoords: null
-};
-</script>
-<script>
+const STEPS = ['Hersteller','Bauart','Modell','Technik','Ausstattung','Garten','Standort','Anfrage'];
+
+// ============================================================
+// STATE — wird beim Reset komplett neu erzeugt
+// ============================================================
+
+function makeFreshState(){
+  return {
+    brand: null,            // 'nordiq' | 'riviera' | null
+    bauart: null,
+    modell: null,
+    treppe: null,
+    technikschacht: 'anlaminiert',  // nur NORDIQ
+    filter: null,
+    heizung: 'keine',
+    rollladen: null,
+    gsa: 'keine',
+    licht: 'm-rgb',         // nur Riviera
+    wellness: [],
+    galabau: [],
+    addrCoords: null
+  };
+}
+
+let cur = 0;
+let leafletMap = null;
+let leafletPoolPolygon = null;
+let locMode = 'none';
+let activePreview = 'garden';
+let state = makeFreshState();
+
+// ============================================================
+// SESSION-RESET — neuer Browser-Tab/-Fenster setzt alles zurück
+// ============================================================
+
+const SESSION_KEY = 'jelic_konf_session_v2';
+function checkSessionFresh(){
+  // sessionStorage wird automatisch geleert wenn der Tab geschlossen wird
+  // Bei einem neuen Tab/Fenster ist also kein Marker vorhanden → State wird neu erzeugt
+  if(!sessionStorage.getItem(SESSION_KEY)){
+    sessionStorage.setItem(SESSION_KEY, Date.now().toString());
+    // State ist bereits frisch durch makeFreshState() oben
+  }
+}
+
+function resetAll(){
+  state = makeFreshState();
+  cur = 0;
+  locMode = 'none';
+  activePreview = 'garden';
+  if(leafletPoolPolygon && leafletMap){ leafletMap.removeLayer(leafletPoolPolygon); leafletPoolPolygon = null; }
+  // Map UI zurücksetzen
+  document.getElementById('mapEmpty').style.display = 'flex';
+  document.getElementById('mapEl').style.display = 'none';
+  document.getElementById('mapOverlay').style.display = 'none';
+  document.getElementById('tabMap').classList.add('disabled');
+  // Form-Felder leeren
+  ['fVorname','fNachname','fMail','fTel','fPlz','fMsg'].forEach(id=>{ const el = document.getElementById(id); if(el) el.value=''; });
+  const consent = document.getElementById('fConsent'); if(consent) consent.checked = false;
+  const addrInput = document.getElementById('addrInput'); if(addrInput) addrInput.value = '';
+  const addrStatus = document.getElementById('addrStatus'); if(addrStatus){ addrStatus.className='addr-status'; addrStatus.textContent=''; }
+  switchPreview('garden');
+  refresh();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ============================================================
+// SETUP: Defaults je Hersteller setzen
+// ============================================================
+
+function selectBrand(b){
+  state.brand = b;
+  if(b==='nordiq'){
+    state.bauart = 'lightgrey';
+    state.modell = 'nq28';
+    state.treppe = 'standard';
+    state.technikschacht = 'anlaminiert';
+    state.filter = 'tt-white';
+    state.heizung = 'wp8kw';
+    state.rollladen = 'shield';
+    state.gsa = 'strom';
+    state.licht = null;
+    state.wellness = [];
+  } else if(b==='riviera'){
+    state.bauart = 'farbe';
+    state.modell = 'lin-845';
+    state.treppe = 'integra';
+    state.technikschacht = null;
+    state.filter = 'aussen-connect';
+    state.heizung = 'hkr100';
+    state.rollladen = 'pc-solar';
+    state.gsa = 'rivierajet';
+    state.licht = 'm-rgb';
+    state.wellness = [];
+  }
+  // Direkt weiter zu Schritt 2
+  cur = 1;
+  refresh();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ============================================================
+// MATERIAL-SVGs für Becken-Vorschau
+// ============================================================
+
 function materialSVG(type){
   if(type==='mosaik'){
     let tiles='';
@@ -533,10 +735,10 @@ function materialSVG(type){
       const c = palette[Math.floor(Math.abs(Math.sin(x*y))*palette.length)];
       tiles += '<rect x="'+(x*8.5+dx)+'" y="'+(y*8.5+dy)+'" width="7.7" height="7.7" rx="0.5" fill="'+c+'" opacity="'+(0.45+a)+'"/>';
     }
-    return '<svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="mos-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3AA0AE"/><stop offset="50%" stop-color="#1A6E7E"/><stop offset="100%" stop-color="#0F4A55"/></linearGradient><linearGradient id="mos-sheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff" stop-opacity="0.32"/><stop offset="50%" stop-color="#fff" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity="0.25"/></linearGradient></defs><rect width="200" height="120" fill="url(#mos-grad)"/>'+tiles+'<rect width="200" height="120" fill="url(#mos-sheen)" opacity="0.4"/></svg>';
+    return '<svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="mos-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3AA0AE"/><stop offset="50%" stop-color="#1A6E7E"/><stop offset="100%" stop-color="#0F4A55"/></linearGradient></defs><rect width="200" height="120" fill="url(#mos-grad)"/>'+tiles+'</svg>';
   }
   if(type==='farbe'){
-    return '<svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cer-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7FC9D5"/><stop offset="60%" stop-color="#4A96A4"/><stop offset="100%" stop-color="#2A6873"/></linearGradient><radialGradient id="cer-shine" cx="0.3" cy="0.2" r="0.6"><stop offset="0%" stop-color="#fff" stop-opacity="0.55"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><rect width="200" height="120" fill="url(#cer-grad)"/><rect width="200" height="120" fill="url(#cer-shine)"/><path d="M0 80 Q50 70 100 80 T200 80" stroke="#fff" stroke-opacity="0.2" stroke-width="1" fill="none"/><path d="M0 92 Q50 84 100 92 T200 92" stroke="#fff" stroke-opacity="0.16" stroke-width="1" fill="none"/></svg>';
+    return '<svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cer-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7FC9D5"/><stop offset="60%" stop-color="#4A96A4"/><stop offset="100%" stop-color="#2A6873"/></linearGradient><radialGradient id="cer-shine" cx="0.3" cy="0.2" r="0.6"><stop offset="0%" stop-color="#fff" stop-opacity="0.55"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><rect width="200" height="120" fill="url(#cer-grad)"/><rect width="200" height="120" fill="url(#cer-shine)"/><path d="M0 80 Q50 70 100 80 T200 80" stroke="#fff" stroke-opacity="0.2" stroke-width="1" fill="none"/></svg>';
   }
   if(type==='granicite'){
     let speckles='';
@@ -546,7 +748,7 @@ function materialSVG(type){
       const c=Math.random()<0.5?'#8B8580':'#5E5854';
       speckles += '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+c+'" opacity="'+o+'"/>';
     }
-    return '<svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="gr-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7B7672"/><stop offset="100%" stop-color="#4A4641"/></linearGradient></defs><rect width="200" height="120" fill="url(#gr-grad)"/>'+speckles+'<rect width="200" height="120" fill="#fff" opacity="0.04"/></svg>';
+    return '<svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="gr-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7B7672"/><stop offset="100%" stop-color="#4A4641"/></linearGradient></defs><rect width="200" height="120" fill="url(#gr-grad)"/>'+speckles+'</svg>';
   }
   if(type==='edelstahl'){
     let lines='';
@@ -555,9 +757,17 @@ function materialSVG(type){
       const op = 0.06 + Math.abs(Math.sin(i*1.3))*0.09;
       lines += '<line x1="0" y1="'+y+'" x2="200" y2="'+(y+1)+'" stroke="#fff" stroke-opacity="'+op+'" stroke-width="0.6"/>';
     }
-    return '<svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="es-grad" x1="0" y1="0" x2="1" y2="0.5"><stop offset="0%" stop-color="#8FA9B0"/><stop offset="30%" stop-color="#A5BDC3"/><stop offset="55%" stop-color="#5E7A82"/><stop offset="100%" stop-color="#324C52"/></linearGradient></defs><rect width="200" height="120" fill="url(#es-grad)"/>'+lines+'<ellipse cx="50" cy="30" rx="80" ry="20" fill="#fff" opacity="0.18"/></svg>';
+    return '<svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="es-grad" x1="0" y1="0" x2="1" y2="0.5"><stop offset="0%" stop-color="#8FA9B0"/><stop offset="30%" stop-color="#A5BDC3"/><stop offset="55%" stop-color="#5E7A82"/><stop offset="100%" stop-color="#324C52"/></linearGradient></defs><rect width="200" height="120" fill="url(#es-grad)"/>'+lines+'</svg>';
   }
 }
+
+// ============================================================
+// RENDERING
+// ============================================================
+
+const checkSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="#0C1A1E" stroke-width="3.4"><path d="M20 6L9 17l-5-5"/></svg>';
+function fmtEUR(p){ return p.toLocaleString('de-DE')+' €'; }
+function fmtAdd(p){ return p>0 ? '+ '+fmtEUR(p) : 'inklusive'; }
 
 function renderSteps(){
   const el = document.getElementById('steps'); el.innerHTML = '';
@@ -575,13 +785,16 @@ function renderSteps(){
   });
 }
 
-const checkSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="#0C1A1E" stroke-width="3.4"><path d="M20 6L9 17l-5-5"/></svg>';
-function fmtEUR(p){ return p.toLocaleString('de-DE')+' €'; }
-function fmtAdd(p){ return p>0 ? '+ '+fmtEUR(p) : 'inklusive'; }
-
 function renderBauart(){
   const g = document.getElementById('gridBauart'); g.innerHTML = '';
-  DATA.bauart.forEach(o=>{
+  const list = DATA[state.brand].bauart;
+  const info = document.getElementById('bauartInfo');
+  if(state.brand==='nordiq'){
+    info.innerHTML = '<b>NORDIQ</b> bietet die Beckenfarbe in zwei Varianten: Standard <b>Lightgrey</b> (heller Papyrus-Ton) oder Aufpreis-Variante <b>Silvergrey</b> (kühler Silbergrau). Beide aus nahtlosem GFK-Vinylesterharz.';
+  } else {
+    info.innerHTML = '<b>RivieraPool</b> bietet vier Oberflächen: Standard-Beckenfarbe (inklusive), Granicite Steingrau, Komplettverfliesung mit Ezarri-Glasmosaik (Signature) oder Edelstahl V4A (Architektur-Sonderbau).';
+  }
+  list.forEach(o=>{
     const sel = state.bauart===o.id;
     const d = document.createElement('div');
     d.className = 'opt'+(sel?' sel':'');
@@ -603,35 +816,54 @@ function renderBauart(){
 
 function renderModelle(){
   const r = document.getElementById('modelRow'); r.innerHTML = '';
-  DATA.modelle.forEach(m=>{
+  const list = DATA[state.brand].modelle;
+  list.forEach(m=>{
     const sel = state.modell===m.id;
     const d = document.createElement('div');
     d.className = 'model-pill'+(sel?' sel':'');
+    let preis;
+    if(state.brand==='nordiq'){
+      preis = state.bauart==='silvergrey' ? m.preisSG : m.preisLG;
+    } else {
+      preis = m.preis;
+    }
     d.innerHTML = '<div class="mp-name">'+m.name+'</div>'
       +'<div class="mp-size">'+m.l.toString().replace('.',',')+' × '+m.b.toString().replace('.',',')+' × '+m.t.toString().replace('.',',')+' m</div>'
-      +'<div class="mp-price">ab '+fmtEUR(m.preis)+'</div>';
+      +'<div class="mp-price">ab '+fmtEUR(preis)+'</div>';
     d.onclick = ()=>{ state.modell=m.id; refresh(); };
     r.appendChild(d);
   });
   const info = document.getElementById('modelInfo');
-  const m = DATA.modelle.find(x=>x.id===state.modell);
+  const m = list.find(x=>x.id===state.modell);
   if(m){
-    const linieDesc = {
-      ancona:'Ancona — schlichte stirnseitige Treppenanlage, maximale Schwimmfläche, zeitloses Design.',
-      linear:'Linear — klare Linien, 4-stufige Treppe, ideal für moderne Architektur.',
-      modena:'Modena — Familienpool mit großzügiger 6-stufiger Treppe und Sitzbereich. Optional mit FUN PAK Massageanlage erweiterbar.'
-    };
-    info.innerHTML = '<b>'+m.name+'</b> · Beckeninhalt ca. '+Math.round(m.l*m.b*1.42)+' m³ · '+linieDesc[m.linie];
+    if(state.brand==='nordiq'){
+      info.innerHTML = '<b>'+m.name+'</b> · Beckeninhalt ca. '+(m.volumen||Math.round(m.l*m.b*1.42))+' m³ · 4-stufiger Einstieg, Flachwasserzone, Sitzbank — alles im Becken integriert.';
+    } else {
+      const linieDesc = {
+        ancona:'Ancona — schlichte stirnseitige Treppenanlage, maximale Schwimmfläche, zeitloses Design.',
+        linear:'Linear — klare Linien, 4-stufige Treppe, ideal für moderne Architektur.',
+        modena:'Modena — Familienpool mit großzügiger 6-stufiger Treppe und Sitzbereich. Optional mit FUN PAK Massageanlage erweiterbar.'
+      };
+      info.innerHTML = '<b>'+m.name+'</b> · Beckeninhalt ca. '+Math.round(m.l*m.b*1.42)+' m³ · '+linieDesc[m.linie];
+    }
   }
+  // Treppe rendern (nur Riviera hat echte Optionen, NORDIQ nur Standard)
+  const treppeList = DATA[state.brand].treppe;
+  renderRadioGrid('gridTreppe', treppeList, 'treppe');
 }
 
-function renderRadioGrid(gridId,list,stateKey){
+function renderRadioGrid(gridId, list, stateKey){
   const g = document.getElementById(gridId); g.innerHTML = '';
   list.forEach(o=>{
     const sel = state[stateKey]===o.id;
     const d = document.createElement('div');
     d.className = 'opt'+(sel?' sel':'');
-    d.innerHTML = (o.tag?'<div class="opt-tag'+(o.riviera?' partner':'')+'">'+o.tag+'</div>':'')
+    let tagClass = '';
+    if(o.tag){
+      if(o.nordiq) tagClass=' nordiq';
+      else if(o.riviera) tagClass=' partner';
+    }
+    d.innerHTML = (o.tag?'<div class="opt-tag'+tagClass+'">'+o.tag+'</div>':'')
       +'<div class="opt-check">'+checkSVG+'</div>'
       +'<div class="opt-name">'+o.name+'</div>'
       +'<div class="opt-desc">'+o.desc+'</div>'
@@ -641,14 +873,24 @@ function renderRadioGrid(gridId,list,stateKey){
   });
 }
 
-function renderMultiGrid(gridId,list,stateKey){
+function renderMultiGrid(gridId, list, stateKey){
   const g = document.getElementById(gridId); g.innerHTML = '';
   list.forEach(o=>{
     const sel = state[stateKey].indexOf(o.id)>=0;
     const d = document.createElement('div');
     d.className = 'opt multi'+(sel?' sel':'');
-    let tagClass = o.riviera?' partner':(o.jelic?'':'');
-    d.innerHTML = (o.tag?'<div class="opt-tag'+tagClass+'">'+o.tag+'</div>':(o.riviera?'<div class="opt-tag partner">Riviera</div>':(o.jelic?'<div class="opt-tag">Jelić Galabau</div>':'')))
+    let tagHTML = '';
+    if(o.tag){
+      let tc = o.nordiq?' nordiq':(o.riviera?' partner':'');
+      tagHTML = '<div class="opt-tag'+tc+'">'+o.tag+'</div>';
+    } else if(o.nordiq){
+      tagHTML = '<div class="opt-tag nordiq">NORDIQ</div>';
+    } else if(o.riviera){
+      tagHTML = '<div class="opt-tag partner">Riviera</div>';
+    } else if(o.jelic){
+      tagHTML = '<div class="opt-tag">Jelić Galabau</div>';
+    }
+    d.innerHTML = tagHTML
       +'<div class="opt-check">'+checkSVG+'</div>'
       +'<div class="opt-name">'+o.name+'</div>'
       +'<div class="opt-desc">'+o.desc+'</div>'
@@ -663,38 +905,77 @@ function renderMultiGrid(gridId,list,stateKey){
   });
 }
 
+// ============================================================
+// PREIS-BERECHNUNG
+// ============================================================
+
 function calcPrice(){
+  if(!state.brand) return 0;
   let p = 0;
+  const B = DATA[state.brand];
+
   // Modell-Basispreis
-  const m = DATA.modelle.find(x=>x.id===state.modell);
-  if(m) p += m.preis;
-  // Bauart-Aufpreis
-  const ba = DATA.bauart.find(b=>b.id===state.bauart);
-  if(ba) p += ba.price;
-  // Treppe / Rollladenschacht
-  const tr = DATA.treppe.find(x=>x.id===state.treppe);
-  if(tr) p += tr.price;
+  if(state.modell){
+    const m = B.modelle.find(x=>x.id===state.modell);
+    if(m){
+      if(state.brand==='nordiq'){
+        p += state.bauart==='silvergrey' ? m.preisSG : m.preisLG;
+      } else {
+        p += m.preis;
+      }
+    }
+  }
+  // Bauart-Aufpreis (nur Riviera, da NORDIQ direkt im Modellpreis)
+  if(state.brand==='riviera' && state.bauart){
+    const ba = B.bauart.find(b=>b.id===state.bauart);
+    if(ba) p += ba.price;
+  }
+  // Treppe
+  if(state.treppe){
+    const tr = B.treppe.find(x=>x.id===state.treppe);
+    if(tr) p += tr.price;
+  }
+  // Technikschacht (nur NORDIQ)
+  if(state.brand==='nordiq' && B.technikschacht){
+    const ts = B.technikschacht.find(x=>x.id===state.technikschacht);
+    if(ts) p += ts.price;
+  }
   // Filter
-  const fi = DATA.filter.find(x=>x.id===state.filter);
-  if(fi) p += fi.price;
+  if(state.filter){
+    const fi = B.filter.find(x=>x.id===state.filter);
+    if(fi) p += fi.price;
+  }
   // Heizung
-  const he = DATA.heizung.find(x=>x.id===state.heizung);
-  if(he) p += he.price;
-  // Rollladen-Abdeckung
-  const ro = DATA.rollladen.find(x=>x.id===state.rollladen);
-  if(ro) p += ro.price;
+  if(state.heizung){
+    const he = B.heizung.find(x=>x.id===state.heizung);
+    if(he) p += he.price;
+  }
+  // Rollladen
+  if(state.rollladen){
+    const ro = B.rollladen.find(x=>x.id===state.rollladen);
+    if(ro) p += ro.price;
+  }
   // GSA
-  const gs = DATA.gsa.find(x=>x.id===state.gsa);
-  if(gs) p += gs.price;
-  // Licht
-  const li = DATA.licht.find(x=>x.id===state.licht);
-  if(li) p += li.price;
+  if(state.gsa){
+    const gs = B.gsa.find(x=>x.id===state.gsa);
+    if(gs) p += gs.price;
+  }
+  // Licht (nur Riviera)
+  if(state.brand==='riviera' && state.licht){
+    const li = B.licht.find(x=>x.id===state.licht);
+    if(li) p += li.price;
+  }
   // Wellness
-  state.wellness.forEach(id=>{ const o = DATA.wellness.find(x=>x.id===id); if(o) p+=o.price; });
-  // Galabau
+  state.wellness.forEach(id=>{ const o = B.wellness.find(x=>x.id===id); if(o) p+=o.price; });
+  // Galabau (gemeinsam)
   state.galabau.forEach(id=>{ const o = DATA.galabau.find(x=>x.id===id); if(o) p+=o.price; });
+
   return Math.max(p,0);
 }
+
+// ============================================================
+// SUMMARY
+// ============================================================
 
 function renderSummary(){
   const list = document.getElementById('sumList'); list.innerHTML = '';
@@ -704,48 +985,110 @@ function renderSummary(){
     li.innerHTML = '<span class="sl-k"><b>'+k+'</b>'+(sub?'<span>'+sub+'</span>':'')+'</span><span class="sl-v'+(isAdd?' add':'')+'">'+v+'</span>';
     list.appendChild(li);
   };
-  const m = DATA.modelle.find(x=>x.id===state.modell);
-  if(m) add('Modell', m.name+' · '+m.l.toString().replace('.',',')+' × '+m.b.toString().replace('.',',')+' m', fmtEUR(m.preis));
-  const ba = DATA.bauart.find(b=>b.id===state.bauart);
-  if(ba && ba.price>0) add('Oberfläche', ba.name, fmtAdd(ba.price), true);
-  else if(ba) add('Oberfläche', ba.name, 'inkl.');
-  const tr = DATA.treppe.find(x=>x.id===state.treppe);
-  if(tr && !tr.base) add('Treppe', tr.name, fmtAdd(tr.price), true);
-  const fi = DATA.filter.find(x=>x.id===state.filter);
-  if(fi) add('Technik', fi.name, fmtEUR(fi.price), true);
-  const he = DATA.heizung.find(x=>x.id===state.heizung);
-  if(he && !he.base) add('Heizung', he.name, fmtAdd(he.price), true);
-  const ro = DATA.rollladen.find(x=>x.id===state.rollladen);
-  if(ro) add('Rollladen', ro.name, fmtAdd(ro.price), true);
-  const gs = DATA.gsa.find(x=>x.id===state.gsa);
-  if(gs) add('Gegenstrom', gs.name, fmtAdd(gs.price), true);
-  const li = DATA.licht.find(x=>x.id===state.licht);
-  if(li) add('Licht', li.name, fmtAdd(li.price), true);
-  state.wellness.forEach(id=>{ const o = DATA.wellness.find(x=>x.id===id); if(o) add('Wellness', o.name, fmtAdd(o.price), true); });
+
+  if(!state.brand){
+    list.innerHTML = '<div class="sum-empty">Wählen Sie zuerst einen Hersteller.</div>';
+    document.getElementById('sumTier').textContent = 'Bitte Hersteller wählen';
+    document.getElementById('stVal').innerHTML = '— <small>€</small>';
+    document.getElementById('stRange').style.width = '0';
+    return;
+  }
+
+  const B = DATA[state.brand];
+  add('Hersteller', state.brand==='nordiq'?'NORDIQ Pools (Komfort-Linie)':'RivieraPool D·Line (Premium-Linie)', '');
+
+  if(state.modell){
+    const m = B.modelle.find(x=>x.id===state.modell);
+    if(m){
+      let preis;
+      if(state.brand==='nordiq'){
+        preis = state.bauart==='silvergrey' ? m.preisSG : m.preisLG;
+      } else {
+        preis = m.preis;
+      }
+      add('Modell', m.name+' · '+m.l.toString().replace('.',',')+' × '+m.b.toString().replace('.',',')+' m', fmtEUR(preis));
+    }
+  }
+  // Bauart-Zeile (nur Riviera, da NORDIQ direkt im Modellpreis)
+  if(state.brand==='riviera' && state.bauart){
+    const ba = B.bauart.find(b=>b.id===state.bauart);
+    if(ba){
+      if(ba.price>0) add('Oberfläche', ba.name, fmtAdd(ba.price), true);
+      else add('Oberfläche', ba.name, 'inkl.');
+    }
+  } else if(state.brand==='nordiq' && state.bauart==='silvergrey'){
+    add('Farbvariante', 'Silvergrey Aufpreis', 'inkl. im Modell');
+  }
+  if(state.treppe){
+    const tr = B.treppe.find(x=>x.id===state.treppe);
+    if(tr && !tr.base) add('Treppe', tr.name, fmtAdd(tr.price), true);
+  }
+  if(state.brand==='nordiq' && B.technikschacht){
+    const ts = B.technikschacht.find(x=>x.id===state.technikschacht);
+    if(ts) add('Technikschacht', ts.name, fmtAdd(ts.price), true);
+  }
+  if(state.filter){
+    const fi = B.filter.find(x=>x.id===state.filter);
+    if(fi) add('Filter/Technik', fi.name, fmtEUR(fi.price), true);
+  }
+  if(state.heizung){
+    const he = B.heizung.find(x=>x.id===state.heizung);
+    if(he && !he.base) add('Heizung', he.name, fmtAdd(he.price), true);
+  }
+  if(state.rollladen){
+    const ro = B.rollladen.find(x=>x.id===state.rollladen);
+    if(ro) add('Abdeckung', ro.name, fmtAdd(ro.price), true);
+  }
+  if(state.gsa){
+    const gs = B.gsa.find(x=>x.id===state.gsa);
+    if(gs && !gs.base) add('Gegenstrom', gs.name, fmtAdd(gs.price), true);
+  }
+  if(state.brand==='riviera' && state.licht){
+    const li = B.licht.find(x=>x.id===state.licht);
+    if(li) add('Licht', li.name, fmtAdd(li.price), true);
+  }
+  state.wellness.forEach(id=>{ const o = B.wellness.find(x=>x.id===id); if(o) add('Wellness', o.name, fmtAdd(o.price), true); });
   state.galabau.forEach(id=>{ const o = DATA.galabau.find(x=>x.id===id); if(o) add('Garten', o.name, '≈ '+fmtAdd(o.price), true); });
-  if(list.children.length===0) list.innerHTML = '<div class="sum-empty">Noch keine Auswahl getroffen.</div>';
+
   const p = calcPrice();
-  // Spannweite ±5% / +15% (untere Grenze nahe Listenpreis, obere mit Sicherheit für Maßvarianten)
   const low = Math.round(p*0.95/500)*500, high = Math.round(p*1.15/500)*500;
   document.getElementById('stVal').innerHTML = low.toLocaleString('de-DE')+' – '+high.toLocaleString('de-DE')+' <small>€</small>';
-  const pct = Math.min(Math.max((p-20000)/(200000-20000),0),1);
+  const maxRange = state.brand==='nordiq' ? 60000 : 200000;
+  const minRange = state.brand==='nordiq' ? 10000 : 20000;
+  const pct = Math.min(Math.max((p-minRange)/(maxRange-minRange),0),1);
   const rng = document.getElementById('stRange');
   rng.style.left = (pct*62)+'%';
   rng.style.width = '32%';
+
   const tierEl = document.getElementById('sumTier');
-  if(p>130000) tierEl.textContent='Signature-Klasse · Riviera Premium';
-  else if(p>80000) tierEl.textContent='Premium-Linie · Riviera Partner';
-  else if(p>40000) tierEl.textContent='Komfort-Linie · Jelić Pools';
-  else tierEl.textContent='Einstiegs-Linie · Jelić Pools';
+  if(state.brand==='nordiq'){
+    if(p>40000) tierEl.textContent='NORDIQ Vollausstattung · Komfort-Linie';
+    else if(p>25000) tierEl.textContent='NORDIQ Komfort · Familien-Linie';
+    else tierEl.textContent='NORDIQ Einstieg · Effizient & Klar';
+  } else {
+    if(p>130000) tierEl.textContent='Signature-Klasse · Riviera Premium';
+    else if(p>80000) tierEl.textContent='Premium-Linie · Riviera Partner';
+    else tierEl.textContent='Komfort-Linie · Riviera D·Line';
+  }
 }
 
+// ============================================================
+// PREVIEW
+// ============================================================
+
 function renderPreview(){
-  const ba = DATA.bauart.find(b=>b.id===state.bauart);
-  const m = DATA.modelle.find(x=>x.id===state.modell);
+  if(!state.brand){
+    document.getElementById('ppLabel').textContent = 'Ihr Pool';
+    document.getElementById('ppDims').textContent = '— × — m';
+    return;
+  }
+  const B = DATA[state.brand];
+  const ba = B.bauart.find(b=>b.id===state.bauart);
+  const m = state.modell ? B.modelle.find(x=>x.id===state.modell) : null;
   const pool = document.getElementById('ppPool');
   if(m){
-    const w = 130 + (m.l-5.5)/(11-5.5)*180;
-    const h = 56 + (m.b-2.7)/(4.2-2.7)*52;
+    const w = 130 + (m.l-5.0)/(11-5.0)*180;
+    const h = 56 + (m.b-2.3)/(4.2-2.3)*52;
     pool.style.width = Math.max(120,w)+'px';
     pool.style.height = Math.max(50,h)+'px';
   }
@@ -753,18 +1096,20 @@ function renderPreview(){
   const ppWater = document.getElementById('ppWater');
   const prev = ppWater.querySelector('.pp-material-layer');
   if(prev) prev.remove();
-  const ml = document.createElement('div');
-  ml.className = 'pp-material-layer';
-  ml.innerHTML = materialSVG(ba.vis);
-  ppWater.insertBefore(ml, ppWater.firstChild);
+  if(ba){
+    const ml = document.createElement('div');
+    ml.className = 'pp-material-layer';
+    ml.innerHTML = materialSVG(ba.vis);
+    ppWater.insertBefore(ml, ppWater.firstChild);
+  }
   document.getElementById('ppLabel').textContent = m ? m.name : 'Ihr Pool';
-  document.getElementById('ppDims').textContent = m ? (m.l.toString().replace('.',',')+' × '+m.b.toString().replace('.',',')+' m') : '';
-  // Features-Indikatoren
-  const hasLight = state.licht!=='s-ww';
-  document.getElementById('featLight').classList.toggle('on', hasLight);
-  const hasCover = state.rollladen && state.rollladen!=='pvc-grau';
-  document.getElementById('featCover').classList.toggle('on', hasCover || state.treppe==='integra' || state.treppe==='wetlounge');
-  const hasJet = state.gsa && state.gsa!=='none';
+  document.getElementById('ppDims').textContent = m ? (m.l.toString().replace('.',',')+' × '+m.b.toString().replace('.',',')+' m') : '— × — m';
+  // Feature-Indikatoren
+  const hasLight = state.brand==='riviera' ? state.licht!=='s-ww' : (state.filter==='tt-rgb');
+  document.getElementById('featLight').classList.toggle('on', !!hasLight);
+  const hasCover = !!state.rollladen;
+  document.getElementById('featCover').classList.toggle('on', hasCover);
+  const hasJet = state.gsa && state.gsa!=='keine';
   document.getElementById('featJet').classList.toggle('on', !!hasJet);
   const deck = document.getElementById('ppDeck');
   if(state.galabau.indexOf('holzdeck')>=0) deck.style.background='linear-gradient(180deg,#b07c43,#8a5e30)';
@@ -773,15 +1118,24 @@ function renderPreview(){
   updateMapPool();
 }
 
+// ============================================================
+// STAGE-META
+// ============================================================
+
 const STAGE_META = [
-  { t:'Die Bauart', d:'Die Beckenoberfläche bestimmt Charakter und Wertigkeit des Pools. Standard-Beckenfarbe ist inklusive — Granicite, Mosaik oder Edelstahl heben den Pool sichtbar.' },
-  { t:'Modell & Treppe', d:'Wählen Sie ein Riviera D·Line Modell. Die Größen entsprechen exakt der Riviera-Preisliste 2026. Optional mit integriertem Rollladenschacht.' },
-  { t:'Die Technik', d:'Filteranlage, RivieraConnect-Steuerung und Wärmepumpe — die Technik bestimmt Komfort, Betriebskosten und Saisonlänge.' },
-  { t:'Die Ausstattung', d:'Echte Riviera-Komponenten: Rollladenabdeckung, Gegenstromanlage, Beleuchtung, Wellness — alles zu Preisen der Preisliste 2026.' },
-  { t:'Der Garten drumherum', d:'Pool und Garten als Gesamtbild — der Galabau-Teil von Jelić. Vorläufige Schätzwerte, exakte Kalkulation im Vor-Ort-Termin.' },
+  { t:'Hersteller wählen', d:'Zwei Welten. Eine Entscheidung. Beide bauen wir mit voller Garantie und Erfahrung.' },
+  { t:'Die Bauart', d:'Die Beckenoberfläche bestimmt Charakter und Wertigkeit des Pools.' },
+  { t:'Modell & Treppe', d:'Wählen Sie ein Beckenmodell. Die Größen entsprechen exakt der Preisliste 2026.' },
+  { t:'Die Technik', d:'Filteranlage und Wärmepumpe — die Technik bestimmt Komfort, Betriebskosten und Saisonlänge.' },
+  { t:'Die Ausstattung', d:'Echte Komponenten zu Preisen der Hersteller-Preislisten 2026.' },
+  { t:'Der Garten drumherum', d:'Pool und Garten als Gesamtbild — der Galabau-Teil von Jelić. Vorläufige Schätzwerte.' },
   { t:'Standort', d:'Auf Wunsch zeigen wir Ihren Pool direkt auf Ihrem Grundstück. Optional.' },
   { t:'Ihre Anfrage', d:'Fast geschafft — wir erstellen Ihr persönliches Festpreis-Angebot inkl. Montage.' }
 ];
+
+// ============================================================
+// FORM-QUALITÄTSMETER
+// ============================================================
 
 function updateQMeter(){
   let score = 10;
@@ -802,28 +1156,88 @@ function updateQMeter(){
   else { st.textContent='Bitte ausfüllen'; st.style.color='#9FB8BC'; }
 }
 
+// ============================================================
+// MAIN REFRESH
+// ============================================================
+
 function refresh(){
   renderSteps();
   document.querySelectorAll('.stage').forEach(s=>{ s.classList.toggle('show', +s.dataset.stage===cur); });
   document.getElementById('phStep').textContent = 'Schritt '+(cur+1)+' von '+STEPS.length;
   document.getElementById('phTitle').textContent = STAGE_META[cur].t;
   document.getElementById('phDesc').textContent = STAGE_META[cur].d;
-  if(cur===0) renderBauart();
-  if(cur===1){ renderModelle(); renderRadioGrid('gridTreppe',DATA.treppe,'treppe'); }
-  if(cur===2){ renderRadioGrid('gridFilter',DATA.filter,'filter'); renderRadioGrid('gridHeizung',DATA.heizung,'heizung'); }
-  if(cur===3){
-    renderRadioGrid('gridRollladen',DATA.rollladen,'rollladen');
-    renderRadioGrid('gridGsa',DATA.gsa,'gsa');
-    renderRadioGrid('gridLicht',DATA.licht,'licht');
-    renderMultiGrid('gridWellness',DATA.wellness,'wellness');
+
+  // Brand-Badge oben rechts
+  const badge = document.getElementById('brandBadge');
+  if(state.brand==='nordiq'){
+    badge.textContent = 'NORDIQ Pools Partner';
+    badge.className = 'tb-badge';
+    badge.style.color = '#7BB4E5';
+    badge.style.borderColor = 'rgba(123,180,229,.32)';
+  } else if(state.brand==='riviera'){
+    badge.textContent = 'Riviera Premium Partner';
+    badge.className = 'tb-badge';
+    badge.style.color = 'var(--pool)';
+    badge.style.borderColor = '';
+  } else {
+    badge.textContent = 'Riviera & NORDIQ Partner';
+    badge.className = 'tb-badge';
+    badge.style.color = '';
+    badge.style.borderColor = '';
   }
-  if(cur===4) renderMultiGrid('gridGalabau',DATA.galabau,'galabau');
-  if(cur===5){
+
+  // Stage 0: Hersteller-Wahl
+  if(cur===0){
+    document.getElementById('brandCardNQ').classList.toggle('sel', state.brand==='nordiq');
+    document.getElementById('brandCardRP').classList.toggle('sel', state.brand==='riviera');
+  }
+
+  // Wenn Hersteller noch nicht gewählt und User würde Stage > 0 sehen → zurück zu 0
+  if(cur > 0 && !state.brand){ cur = 0; }
+
+  if(state.brand && cur===1) renderBauart();
+  if(state.brand && cur===2) renderModelle();
+  if(state.brand && cur===3){
+    renderRadioGrid('gridFilter', DATA[state.brand].filter, 'filter');
+    renderRadioGrid('gridHeizung', DATA[state.brand].heizung, 'heizung');
+    // Bei NORDIQ zusätzlich Technikschacht-Auswahl in Filter-Bereich oben einblenden
+    if(state.brand==='nordiq'){
+      // Wir hängen Technikschacht-Optionen vor den Filter
+      // Trick: vor das gridFilter ein neues Sub anzeigen
+      let tsGrid = document.getElementById('gridTechnikschacht');
+      if(!tsGrid){
+        const filterCat = document.querySelector('.stage[data-stage="3"] .cat-sub:first-child');
+        const wrap = document.createElement('div');
+        wrap.innerHTML = '<div class="cat-sub" id="tsLabel">Technikschacht</div><div class="opt-grid two" id="gridTechnikschacht"></div>';
+        document.querySelector('.stage[data-stage="3"]').insertBefore(wrap, filterCat);
+      }
+      renderRadioGrid('gridTechnikschacht', DATA.nordiq.technikschacht, 'technikschacht');
+    } else {
+      const tsLabel = document.getElementById('tsLabel');
+      const tsGrid = document.getElementById('gridTechnikschacht');
+      if(tsLabel) tsLabel.remove();
+      if(tsGrid) tsGrid.remove();
+    }
+  }
+  if(state.brand && cur===4){
+    renderRadioGrid('gridRollladen', DATA[state.brand].rollladen, 'rollladen');
+    renderRadioGrid('gridGsa', DATA[state.brand].gsa, 'gsa');
+    if(state.brand==='riviera'){
+      document.getElementById('lichtWrap').style.display = '';
+      renderRadioGrid('gridLicht', DATA.riviera.licht, 'licht');
+    } else {
+      document.getElementById('lichtWrap').style.display = 'none';
+    }
+    renderMultiGrid('gridWellness', DATA[state.brand].wellness, 'wellness');
+  }
+  if(cur===5) renderMultiGrid('gridGalabau', DATA.galabau, 'galabau');
+  if(cur===6){
     document.getElementById('locSkip').classList.toggle('sel', locMode==='skip');
     document.getElementById('locMap').classList.toggle('sel', locMode==='map');
     document.getElementById('addrForm').classList.toggle('show', locMode==='map');
   }
-  if(cur===6) updateQMeter();
+  if(cur===7) updateQMeter();
+
   document.getElementById('btnBack').disabled = cur===0;
   const next = document.getElementById('btnNext');
   if(cur===STEPS.length-1){
@@ -833,9 +1247,22 @@ function refresh(){
     next.className='btn btn-primary';
     next.innerHTML='Weiter<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
   }
+  // Stage 0: Next deaktivieren wenn kein Brand gewählt
+  if(cur===0){
+    next.disabled = !state.brand;
+    next.style.opacity = state.brand ? '1' : '0.5';
+  } else {
+    next.disabled = false;
+    next.style.opacity = '1';
+  }
+
   renderSummary();
   renderPreview();
 }
+
+// ============================================================
+// LOCATION
+// ============================================================
 
 function setLocMode(m){
   locMode = m;
@@ -843,9 +1270,7 @@ function setLocMode(m){
   if(m==='map') document.getElementById('tabMap').classList.remove('disabled');
 }
 
-// ========== GEOCODING — Photon (komoot) primary, Nominatim fallback ==========
 async function geocode(query){
-  // Timeout wrapper
   const fetchWithTimeout = async (url, ms=8000)=>{
     const ctrl = new AbortController();
     const t = setTimeout(()=>ctrl.abort(), ms);
@@ -858,8 +1283,7 @@ async function geocode(query){
       throw e;
     }
   };
-
-  // Strategie 1: Photon (komoot) — browserfreundlich, kein API-Key, CORS sauber
+  // Photon (komoot) primary
   try{
     const url = 'https://photon.komoot.io/api/?q='+encodeURIComponent(query)+'&limit=1&lang=de';
     const res = await fetchWithTimeout(url, 8000);
@@ -867,49 +1291,30 @@ async function geocode(query){
       const data = await res.json();
       if(data.features && data.features.length>0){
         const f = data.features[0];
-        const coords = f.geometry.coordinates; // [lon, lat]
+        const coords = f.geometry.coordinates;
         const props = f.properties || {};
         const parts = [props.name, props.housenumber, props.postcode, props.city, props.state].filter(Boolean);
-        return {
-          lat: coords[1],
-          lon: coords[0],
-          display: parts.join(', ') || (props.name || query),
-          source: 'photon'
-        };
+        return { lat: coords[1], lon: coords[0], display: parts.join(', ') || (props.name || query), source: 'photon' };
       }
     }
-  } catch(e){
-    console.warn('Photon failed:', e.message);
-  }
-
-  // Strategie 2: Nominatim Fallback
+  } catch(e){ console.warn('Photon failed:', e.message); }
+  // Nominatim fallback
   try{
     const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=de,at,ch&q='+encodeURIComponent(query);
     const res = await fetchWithTimeout(url, 8000);
     if(res.ok){
       const data = await res.json();
       if(data.length>0){
-        return {
-          lat: parseFloat(data[0].lat),
-          lon: parseFloat(data[0].lon),
-          display: data[0].display_name.split(',').slice(0,4).join(', '),
-          source: 'nominatim'
-        };
+        return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon), display: data[0].display_name.split(',').slice(0,4).join(', '), source: 'nominatim' };
       }
     }
-  } catch(e){
-    console.warn('Nominatim failed:', e.message);
-  }
-
+  } catch(e){ console.warn('Nominatim failed:', e.message); }
   return null;
 }
 
 async function lookupAddress(){
   const q = document.getElementById('addrInput').value.trim();
-  if(!q){
-    showAddrStatus('Bitte eine Adresse eingeben.', 'error');
-    return;
-  }
+  if(!q){ showAddrStatus('Bitte eine Adresse eingeben.', 'error'); return; }
   const btn = document.getElementById('addrBtn');
   btn.disabled = true;
   btn.textContent = 'Suche…';
@@ -925,7 +1330,7 @@ async function lookupAddress(){
     showMapWithLocation(result.lat, result.lon);
     switchPreview('map');
   } catch(e){
-    showAddrStatus('Netzwerkfehler. Bitte erneut versuchen oder Adresse präzisieren.', 'error');
+    showAddrStatus('Netzwerkfehler. Bitte erneut versuchen.', 'error');
   } finally {
     btn.disabled = false;
     btn.textContent = 'Anzeigen';
@@ -944,11 +1349,7 @@ function showMapWithLocation(lat, lon){
   document.getElementById('mapOverlay').style.display = 'flex';
   if(!leafletMap){
     leafletMap = L.map('mapEl', { zoomControl: false, attributionControl: false }).setView([lat, lon], 19);
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      maxZoom: 21,
-      crossOrigin: true,
-      attribution: '© Esri'
-    }).addTo(leafletMap);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 21, crossOrigin: true, attribution: '© Esri' }).addTo(leafletMap);
     L.control.zoom({ position:'bottomright' }).addTo(leafletMap);
     leafletMap.on('click', (e)=>{ placePoolPolygon(e.latlng.lat, e.latlng.lng); state.addrCoords = [e.latlng.lat, e.latlng.lng]; });
   } else {
@@ -960,14 +1361,19 @@ function showMapWithLocation(lat, lon){
 
 function placePoolPolygon(lat, lon){
   if(leafletPoolPolygon) leafletMap.removeLayer(leafletPoolPolygon);
-  const m = DATA.modelle.find(x=>x.id===state.modell);
+  if(!state.brand || !state.modell) return;
+  const m = DATA[state.brand].modelle.find(x=>x.id===state.modell);
   if(!m) return;
-  // Lat-Differenz pro Meter ~ 0.0000089, Lon-Differenz pro Meter cosinus-korrigiert
   const dLat = m.b/2 * 0.0000089;
   const dLon = m.l/2 * (0.0000089 / Math.cos(lat*Math.PI/180));
   const coords = [[lat-dLat, lon-dLon],[lat-dLat, lon+dLon],[lat+dLat, lon+dLon],[lat+dLat, lon-dLon]];
-  const ba = DATA.bauart.find(b=>b.id===state.bauart);
-  const fillColor = ba.id==='mosaik' ? '#1A6E7E' : (ba.id==='edelstahl' ? '#6FA9B2' : (ba.id==='granicite' ? '#5E7A82' : '#3AA0AE'));
+  const ba = DATA[state.brand].bauart.find(b=>b.id===state.bauart);
+  let fillColor = '#3AA0AE';
+  if(ba){
+    if(ba.id==='mosaik') fillColor='#1A6E7E';
+    else if(ba.id==='edelstahl') fillColor='#6FA9B2';
+    else if(ba.id==='granicite' || ba.id==='silvergrey') fillColor='#5E7A82';
+  }
   leafletPoolPolygon = L.polygon(coords, { color:'#7FC9D5', weight:2.5, opacity:1, fillColor: fillColor, fillOpacity:0.78, smoothFactor:1 }).addTo(leafletMap);
 }
 
@@ -984,7 +1390,12 @@ function switchPreview(which){
   if(which==='map' && leafletMap) setTimeout(()=>leafletMap.invalidateSize(), 200);
 }
 
+// ============================================================
+// NAVIGATION
+// ============================================================
+
 document.getElementById('btnNext').onclick = ()=>{
+  if(cur===0 && !state.brand){ showToast('Bitte zuerst einen Hersteller wählen.', true); return; }
   if(cur<STEPS.length-1){ cur++; refresh(); window.scrollTo({top:0,behavior:'smooth'}); }
   else { submitForm(); }
 };
@@ -1000,7 +1411,6 @@ document.getElementById('btnBack').onclick = ()=>{
   }
 });
 
-// Enter in Adress-Input löst Suche aus
 document.addEventListener('DOMContentLoaded',()=>{
   const addrInp = document.getElementById('addrInput');
   if(addrInp){
@@ -1046,6 +1456,11 @@ function showToast(msg,isErr){
   window._tt = setTimeout(()=>t.classList.remove('show'),3800);
 }
 
+// ============================================================
+// INIT
+// ============================================================
+
+checkSessionFresh();
 refresh();
 </script>
 </body>
